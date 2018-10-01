@@ -1,6 +1,6 @@
 module.exports = db => {
   const User = db.Model.extend({
-    tableName: 'listener-quiz_users',
+    tableName: 'fc_users',
     idAttribute: 'id',
     hasTimestamps: true,
     responses: function() {

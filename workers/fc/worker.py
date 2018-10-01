@@ -81,37 +81,9 @@ def callback(ch, method, properties, body):
                 print "no user is being passed"
                 user = None
 
-            for stim in stimuli:
-                stim['num_responses'] = int(stim['num_responses'])
+            
 
-            sorted_stimuli = sorted(stimuli, key=itemgetter('num_responses'))
-            print(sorted_stimuli)
-
-            last = sorted_stimuli[35]['num_responses']
-
-            final_list = []
-
-            for i in range(len(sorted_stimuli)):
-                if sorted_stimuli[i]['num_responses'] < last:
-                    final_list.append(sorted_stimuli[i])
-
-            equal_list = []
-
-            for i in range(len(sorted_stimuli)):
-                if sorted_stimuli[i]['num_responses'] == last:
-                    equal_list.append(sorted_stimuli[i])
-
-            shuffle(equal_list)
-
-            for i in range(36 - len(final_list)):
-                final_list.append(equal_list[i])
-
-            finalStims = []
-
-            for stim in final_list:
-                finalStims.append(stim['stimulus'])
-
-            body = json.dumps({'stimuli': finalStims, 'user': user})
+            body = json.dumps({'stimuli': stimuli, 'user': user})
 
             channel.basic_publish(
                 exchange='',

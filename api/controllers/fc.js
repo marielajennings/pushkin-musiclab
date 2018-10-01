@@ -60,13 +60,13 @@ module.exports = (rpc, conn, dbWrite) => {
     const responseInput = {
       method: 'raw',
       params: [
-        `DELETE FROM "listener-quiz_responses" WHERE "user_id" = ${req.body.id}`
+        `DELETE FROM "fc_responses" WHERE "user_id" = ${req.body.id}`
       ]
     };
     const stimulusResponseInput = {
       method: 'raw',
       params: [
-        `DELETE FROM "listener-quiz_stimulusResponses" WHERE "user_id" = ${req
+        `DELETE FROM "fc_stimulusResponses" WHERE "user_id" = ${req
           .body.id}`
       ]
     };
@@ -123,7 +123,7 @@ module.exports = (rpc, conn, dbWrite) => {
     const update = {
       method: 'raw',
       params: [
-        `UPDATE "listener-quiz_stimuli" SET "num_responses" = "num_responses" + 1 WHERE "stimulus" = '${stimulus}'`
+        `UPDATE "fc_stimuli" SET "num_responses" = "num_responses" + 1 WHERE "stimulus" = '${stimulus}'`
       ]
     };
     return rpc(conn, channelName, create)
@@ -161,7 +161,7 @@ module.exports = (rpc, conn, dbWrite) => {
       const clean = {
         method: 'raw',
         params: [
-          `DELETE FROM "listener-quiz_users" WHERE "id" NOT IN (SELECT "user_id" FROM "listener-quiz_responses" UNION SELECT "user_id" FROM "listener-quiz_stimulusResponses") AND "created_at" < NOW() - INTERVAL '2 hours'`
+          `DELETE FROM "fc_users" WHERE "id" NOT IN (SELECT "user_id" FROM "fc_responses" UNION SELECT "user_id" FROM "fc_stimulusResponses") AND "created_at" < NOW() - INTERVAL '2 hours'`
         ]
       };
       return dbWrite(conn, fileName + '_db_write', clean)
