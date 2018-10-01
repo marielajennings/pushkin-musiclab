@@ -30,7 +30,13 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         default: jsPsych.ALL_KEYS,
         description: 'The keys the subject is allowed to press to respond to the stimulus.'
       },
-      prompt: {
+      prompt1: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'Any content here will be displayed below the stimulus.'
+      },
+      prompt2: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
         default: null,
@@ -63,8 +69,12 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
     var new_html = '<div id="jspsych-html-keyboard-response-stimulus">'+trial.stimulus+'</div>';
 
     // add prompt
-    if(trial.prompt !== null){
-      new_html += trial.prompt;
+    if(trial.prompt1 !== null){
+      new_html += trial.prompt1;
+    }
+	
+    if(trial.prompt2 !== null){
+      new_html += trial.prompt2;
     }
 
     // draw
