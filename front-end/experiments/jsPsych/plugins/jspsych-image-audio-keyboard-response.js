@@ -85,7 +85,7 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-	  var new_html = '<table style="width:100%; border-spacing: 10px">';
+	  var new_html = '<table style="width:100%; border-spacing: 40px; border-collapse: separate;">';
 
 	  new_html += '<tr><td><img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus" style="max-width: 500px; float:left"></img></td>';
 
