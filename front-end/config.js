@@ -1,5 +1,9 @@
 export const CONFIG = {
-  forum: true,
-  auth: true,
-  popup: 5
+  forum: false,
+  auth: false,
+  
+  'fc': {
+    popup: false
+  }
+ 
 };

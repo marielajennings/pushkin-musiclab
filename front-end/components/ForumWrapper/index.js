@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Modal from '../PopupModal/model';
+import VideoModal from '../VideoModal/model.js'
 import QuizForum from '../QuizForum/index';
 import { makePost } from '../../actions/forum';
 import {
@@ -38,7 +39,7 @@ const withForum = (Quiz, quiz_name, config) => {
         super(props);
         this.state = {};
       }
-      componentDidMount() {
+      componentWillMount() {
         this.showProfile();
       }
       componentWillUnmount() {
@@ -53,12 +54,14 @@ const withForum = (Quiz, quiz_name, config) => {
         this.setState({ currentQuestion: data });
       };
       showQuizPopUp = () => {
-        if (!isAuthenticated()) {
+        // pull from the config object using the quiz_name
+        const showPopup = config[quiz_name].popup;
+        if (!isAuthenticated() && showPopup) {
           return (
             <Modal isOpen={this.state.isModalOpen}>
               <div className={s['modal-content']}>
                 <h4 style={{ textAlign: 'center' }}>
-                  There are many benefits after logging in, please
+                  There are many benefits after logging in, please <br />
                   <a style={{ cursor: 'pointer' }} onClick={login}>
                     Log In/Sign up
                   </a>
@@ -84,9 +87,16 @@ const withForum = (Quiz, quiz_name, config) => {
       };
       showProfile = () => {
         if (isAuthenticated()) {
-          this.props.dispatch(getUserInfo());
+          this.props.dispatch(getUserInfo(quiz_name));
         } else {
-          this.props.dispatch(generateAnonymousUser());
+          // if a user for this specific quiz already has a subject id, use that instead.
+          if(this.props.userInfo.subjectIds[quiz_name]) {
+            console.log('already have a userid for this quiz')
+
+
+          } else {
+            this.props.dispatch(generateAnonymousUser(quiz_name));
+          }
         }
       };
       dispatchTempResponse = (response, item) => {
@@ -108,14 +118,17 @@ const withForum = (Quiz, quiz_name, config) => {
           <div>
             {config.auth && <div>{this.showQuizPopUp()}</div>}
             <div>
-              <Quiz
-                {...this.props}
-                config={config}
-                showPopup={this.openModal}
-                mountCurrentQuestion={this.mountCurrentQuestion}
-                setCount={this.setCount}
-                dispatchTempResponse={this.dispatchTempResponse}
-              />
+              {this.props.userInfo.profile && (
+                <Quiz
+                  {...this.props}
+                  user={this.props.userInfo}
+                  config={config}
+                  showPopup={this.openModal}
+                  mountCurrentQuestion={this.mountCurrentQuestion}
+                  setCount={this.setCount}
+                  dispatchTempResponse={this.dispatchTempResponse}
+                />
+              )}
             </div>
             <div>
               {config.auth && <div>{this.showQuizPopUp()}</div>}

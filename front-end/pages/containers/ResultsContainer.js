@@ -5,7 +5,6 @@ import CommentForm from "../../components/CommentForm/";
 import { submitComments } from "../../actions/userinfo";
 
 const submitPart2 = answers => {
-  debugger;
 };
 
 class ResultsContainer extends Component {

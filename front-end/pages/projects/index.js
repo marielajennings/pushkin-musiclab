@@ -41,12 +41,10 @@ class ProjectPage extends React.Component {
                     className={s.sub}
                     style={{ marginLeft: "20px", marginRight: "20px" }}
                   >
-                    <a
-                      className={s.title}
-                      href="http://archive.gameswithwords.org/VerbCorner"
-                    >
+                   <Link className={s.title} to="/projects/verbcorner">
                       VerbCorner
-                    </a>
+                    </Link>
+                     
                     <br />Help us crowdsource the structure of language,
                     meaning, and thought
                   </p>

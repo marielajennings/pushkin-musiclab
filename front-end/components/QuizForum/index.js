@@ -18,6 +18,7 @@ class QuizForum extends React.Component {
     this.setState({ isModalOpen: false });
   };
   handleOnSubmit = (data, cb) => {
+    console.log(data);
     this.props.makeForumPost(data, () => {
       this.closeModal();
       this.props.handleLocalPostChange();
@@ -38,7 +39,7 @@ class QuizForum extends React.Component {
           </h4>
         );
       } else {
-        if (typeof currentQuestion.question.stimulus != undefined) {
+       /* if (typeof currentQuestion.question.stimulus != undefined) { */
           return (
             <h4 style={{ textAlign: 'center' }}>
               Please{' '}
@@ -48,7 +49,7 @@ class QuizForum extends React.Component {
               to ask a question on the forum.
             </h4>
           );
-        }
+      //  }
       }
     }
     return (
@@ -63,7 +64,7 @@ class QuizForum extends React.Component {
             </Button>
           )}
         {currentQuestion &&
-          currentQuestion.question.prompt && (
+         (
             <Button
               className="btn btn-primary"
               onClick={() => this.openModal()}

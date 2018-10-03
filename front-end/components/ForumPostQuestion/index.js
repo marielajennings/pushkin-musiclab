@@ -23,14 +23,14 @@ class ForumPostQuestion extends React.Component {
             </div>
           )}
           <div>
-            <a className={s['question-title']}>{subject}</a>
+            <h3 className={s['question-title']}>{subject}</h3>
           </div>
         </div>
         <div>
           <p>{content}</p>
           {quizQuestion && (
             <p>
-              see the quiz question <a onClick={openQuestion}>here</a>
+              See the quiz question <a className={s.link} onClick={openQuestion}>here</a>
             </p>
           )}
         </div>

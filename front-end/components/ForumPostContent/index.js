@@ -20,18 +20,8 @@ class ForumQuestion extends React.Component {
     this.props.dispatch(getUserInfo());
   }
   componentDidMount() {
-    getOnePost(this.props.params.id).then(res => {
-      this.setState({ data: res });
-    });
+    this.props.dispatch(getOnePost(this.props.params.id))
   }
-  handleLocalComment = comment => {
-    this.setState({
-      data: {
-        ...this.state.data,
-        forumComments: [...this.state.data.forumComments, comment]
-      }
-    });
-  };
   createComment = (data, cb) => {
     this.props.dispatch(makeComment(data, cb));
   };
@@ -42,19 +32,19 @@ class ForumQuestion extends React.Component {
     this.setState({ openQuestion: false });
   };
   render() {
-    const { userInfo, formData, comment } = this.props;
+    const { userInfo, formData, comment, post } = this.props;
     return (
       <div style={{ display: 'flex' }}>
-        {!this.state.data && <Loading />}
-        {this.state.data && (
+        {!post && <Loading />}
+        {post && (
           <div style={{ width: '50%' }}>
             <ForumPostQuestion
-              subject={this.state.data.post_subject}
-              content={this.state.data.post_content}
-              quizQuestion={this.state.data.stim}
-              poster={this.state.data.nickname}
-              created_at={this.state.data.created_at}
-              quiz={this.state.data.quiz}
+              subject={post.post_subject}
+              content={post.post_content}
+              quizQuestion={post.stim}
+              poster={post.nickname}
+              created_at={post.created_at}
+              quiz={post.quiz}
               openQuestion={this.openQuestion}
             />
             <svg height="2" width="100%">
@@ -64,14 +54,13 @@ class ForumQuestion extends React.Component {
                 style={{ stroke: '#cfd8dc', strokeWidth: 2 }}
               />
             </svg>
-            <ForumPostComments comments={this.state.data.forumComments} />
+            <ForumPostComments comments={post.forumComments || []} />
             {isAuthenticated() && (
               <PostReplyForm
                 handleSubmit={this.createComment}
                 user={userInfo.profile}
                 formData={formData}
                 post_id={this.props.params.id}
-                handleLocalComment={this.handleLocalComment}
               />
             )}
           </div>
@@ -79,9 +68,10 @@ class ForumQuestion extends React.Component {
         {this.state.openQuestion && (
           <div style={{ width: '50%' }}>
             <StaticQuestionContainer
+              quiz={post.quiz}
+              userInfo={this.props.userInfo}
               closeQuestion={this.closeQuestion}
-              question={this.state.data.stim}
-              userInfo={userInfo}
+              question={post.stim}
             />
           </div>
         )}
@@ -89,10 +79,12 @@ class ForumQuestion extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state,ownProps) => {
+  const post = state.forum.posts.find(post => post.id + '' === ownProps.params.id);
   return {
     userInfo: state.userInfo,
-    formData: state.form
+    formData: state.form,
+    post: post
   };
 };
 export default connect(mapStateToProps)(ForumQuestion);

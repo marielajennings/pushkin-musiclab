@@ -37,8 +37,8 @@ if (quizFolder) {
                 ])
                 .then(answer => {
                   if (answer.properSeeds) {
-                    const runSeed = require(`./seeds/${quizFolder}/index`);
-                    runSeed();
+                    const runSeed = require(`./seeds/index`);
+                    runSeed(quizFolder);
                   } else {
                     console.log(
                       chalk.red(

@@ -51,62 +51,85 @@ export function fetchAllPosts() {
       });
   };
 }
+function fetchingUserPosts() {
+  return {
+    type: 'FETCHING_USER_POSTS'
+  }
+}
+function userPosts(posts) {
+  return {
+    type: 'RECEIVED_USER_POSTS',
+    posts
+  }
+}
 export function getUserPostIds(auth0Id) {
-  return new Promise((resolve, reject) => {
+  return dispatch => {
+    dispatch(fetchingUserPosts());
     return local
       .get(`/user/${auth0Id}/posts`)
       .then(res => {
-        resolve(res.data);
+        return res.data.map(post => {
+          dispatch(updatePost(post))
+        })
       })
       .catch(err => {
-        throw err;
+        dispatch(error(err));
       });
+  }
+  return new Promise((resolve, reject) => {
   });
 }
+function updatePost(post) {
+  return {
+    type: 'UPDATE_POST',
+    post
+  };
+}
 export function getOnePost(id) {
-  fetchAllPostsBegin();
-  return new Promise((resolve, reject) => {
-    return local
-      .get(`/posts/${id}`)
-      .then(res => {
-        return res.data;
-      })
-      .then(data => {
-        return local
-          .get(`/getAuth0User/${data.auth0_id}`)
-          .then(user => {
-            return {
-              ...data,
-              ...user.data
-            };
-          })
-          .then(data => {
-            if (data.forumComments.length) {
-              return Promise.all(
-                data.forumComments.map(comment => {
-                  return local
-                    .get(`/getAuth0User/${comment.auth0_id}`)
-                    .then(user => {
-                      return {
-                        ...comment,
-                        ...user.data
-                      };
-                    });
-                })
-              ).then(comments => {
-                resolve({
-                  ...data,
-                  forumComments: comments
+  return dispatch => {
+    dispatch(fetchAllPostsBegin());
+      return local
+        .get(`/posts/${id}`)
+        .then(res => {
+          return res.data;
+        })
+        .then(data => {
+          return local
+            .get(`/getAuth0User/${data.auth0_id}`)
+            .then(res => {
+              let user = res.data;
+              return {
+                ...data,
+                ...user
+              };
+            })
+            .then(data => {
+              if (data.forumComments.length) {
+                return Promise.all(
+                  data.forumComments.map(comment => {
+                    return local
+                      .get(`/getAuth0User/${comment.auth0_id}`)
+                      .then(res => {
+                        let user = res.data;
+                        return {
+                          ...comment,
+                          ...user
+                        };
+                      });
+                  })
+                ).then(comments => {
+                  return ({
+                    ...data,
+                    forumComments: comments
+                  });
                 });
-              });
-            } else {
-              resolve(data);
-            }
-          });
-      });
-  }).catch(err => {
-    throw err;
-  });
+              }
+              return data;
+            })
+        }).then(post => {
+          dispatch(updatePost(post));
+        })
+  }
 }
 export function makeComment(payload, cb) {
   return (dispatch, getState) => {
@@ -117,11 +140,13 @@ export function makeComment(payload, cb) {
         }
       })
       .then(resp => {
+        // build the new post
+        const state = getState()
+        const post = state.forum.posts.find(post => post.id + '' === resp.data.post_id)
+        post.forumComments = post.forumComments || [];
         return local.get(`/getAuth0User/${resp.data.auth0_id}`).then(user => {
-          cb({
-            ...resp.data,
-            ...user.data
-          });
+          post.forumComments.push({ ...resp.data, ...user.data })
+          return dispatch(updatePost(post));
         });
       })
       .then(res => {
@@ -194,15 +219,15 @@ export function clearSearch() {
   };
 }
 
+
 function removePost(id) {
   return {
     type: REMOVE_POST, 
     id
   }
 }
-
 export function deletePost(post) {
-  return (dispatch, getState) => {
+  return dispatch => {
     if(getState().userInfo.isAdmin) {
     return local
       .delete(`/posts/${post.id}`, {
@@ -218,7 +243,6 @@ export function deletePost(post) {
     }
   };
 }
-
 function receiveComments(comments) {
   return {
     type: RECEIVE_COMMENTS,

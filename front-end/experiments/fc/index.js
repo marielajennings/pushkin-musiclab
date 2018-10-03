@@ -738,7 +738,7 @@ img.push(new_img)
 
 
 
-
+console.log('fadsfdsafedafdadfrfddedfasedafs')
 
 
 /* songs and function */
@@ -899,15 +899,13 @@ var songTest1 = {
       data: jsPsych.timelineVariable('data'),
       on_finish: function(data) {
         data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.key);
-        console.log('The trial just ended.');
         count = jsPsych.data.get().filter({correct: true}).count();
         reaction1 = jsPsych.data.get().select('rt');
         songPlay1 = data.stimulus;
         correctResp1 = data.correct_response;
-        console.log(reaction1);
-        console.log(count);
-        console.log(songPlay1);
-        console.log(correctResp1)
+        console.log('stuff')
+        saveDataOnFinish(data);
+    
       }
     },
     {
@@ -924,13 +922,16 @@ var songTest1 = {
       prompt2: '<p>Press any key to continue.</p>',
       on_finish: function(data){
         reactionMean = jsPsych.data.get().filter({trial_type: 'audio-keyboard-response'}).select('rt').mean();
-        console.log(reactionMean);
+        saveDataOnFinish(data);
       }
     },
     {
       type: 'html-keyboard-response',
       stimulus: function(){return '<p align="center">How much did you like this song? <p> Use your keyboard to enter your response on a scale from 1 ("hated it") to 4 ("loved it").<br><br><b>You can also listen to the song again before answering:<br></b> <audio controls><source src='+songPlay1+'></audio></p><div align="center" style="font-size:24pt"><b>1&emsp;&emsp;2&emsp;&emsp;3&emsp;&emsp;4</div><div align="center">Hate it&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Love it</b></div>'},
       choices: ['1', '2', '3', '4'],
+      on_finish: function(data){
+        saveDataOnFinish(data);
+      }
     },
     {
       type: 'image-keyboard-response',
@@ -939,7 +940,10 @@ var songTest1 = {
       citation: jsPsych.timelineVariable('citation'),
       prompt1: ' ',
       prompt2: 'Press any key to continue!',
-      response_ends_trial: true
+      response_ends_trial: true,
+      on_finish: function(data){
+        saveDataOnFinish(data);
+      }
     }
   ],
   timeline_variables: song_list,
@@ -976,21 +980,70 @@ var social1 = {
   footer: '<br>Play again! (link to be added)<br>Play another quiz! (link to be added)<br><a href="http://www.themusiclab.org">Go back to our website</a>'
 };
 
+var self = this;
+
+var saveDataOnFinish= function(data){
+  console.log("Save triggered")
+  console.log(data)
+  const toSend = data;
+  return axiosFC
+        .post('/stimulusResponse', {
+        user_id: self.props.user.profile.id,
+        data_string: toSend,
+        })
+       
+  
+};
 
 
 
 
-timeline.push(welcome1, ready1, songTest1, social1)
 
 
-jsPsych.init({
-    timeline: timeline,
-   display_element: this.refs.jsPsychTarget,
-    on_finish: function() {
-      jsPsych.data.displayData();
-    },
-    default_iti: 250
-});
+axiosFC
+      .post('/getAllStimuli')
+      .then(res => {
+        _this.hideLoading();
+        //user = self.props.user
+        console.log(self.props.user.profile.id)
+        console.log('this is the user')
+    
+      })
+
+      .then(() => {
+        
+      timeline.push(welcome1, ready1, songTest1, social1)
+      //console.log('created timeline')
+      })
+
+      .then(() => {
+
+      jsPsych.init({
+          timeline: timeline,
+         display_element: this.refs.jsPsychTarget,
+          on_finish: function() {
+            jsPsych.data.displayData();
+          },
+          default_iti: 250
+      });
+      })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

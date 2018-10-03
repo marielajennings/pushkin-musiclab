@@ -16,7 +16,7 @@ import {
 //   SET_RESULTS
 // } from '../actions/questionque';
 
-export default function userInfo(state = { profile: null }, action) {
+export default function userInfo(state = { profile: null, subjectIds: {} }, action) {
   switch (action.type) {
     case SUBMIT_USER_INFO_SUCCESS: {
       return {
@@ -69,10 +69,14 @@ export default function userInfo(state = { profile: null }, action) {
       };
     }
     case LOGIN_SUCCESS: {
-      const isAdmin = action.profile.groups && action.profile.groups.indexOf("Admin") > -1 
+      const isAdmin = action.profile && action.profile.groups && action.profile.groups.indexOf("Admin") > -1 
       return {
         ...state,
         profile: action.profile,
+        subjectIds: {
+          ...state.subjectIds,
+          [action.profile.quiz]: action.profile.id,
+        },
         isAdmin: isAdmin
       };
     }

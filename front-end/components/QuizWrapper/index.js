@@ -1,5 +1,5 @@
 import React from 'react';
-import ListenerQuiz from '../../experiments/listener-quiz';
+import FC from '../../experiments/fc';
 
 import PropTypes from 'prop-types';
 

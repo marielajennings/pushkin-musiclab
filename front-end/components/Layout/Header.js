@@ -83,7 +83,7 @@ class Header extends React.Component {
           <b.Image
             src={require('../../img/gww_logo.png')}
             className={s.logo}
-            style={{ marginTop: '5px', height: '90px' }}
+            style={{ marginTop: '5px', height: '40px' }}
           />
           <div className={s.navWrapper}>
             <b.Nav bsStyle="pills">
@@ -167,7 +167,10 @@ class Header extends React.Component {
           )}
           <b.Nav
             style={{
-              margin: '0px',
+              position:"absolute",
+              top:"3.5em",
+              marginBottom: '3em',
+              margin: 'auto',
               fontFamily: "'Ribeye Marrow', cursive",
               fontSize: '20px',
               backgroundColor: '#a9a9a9'

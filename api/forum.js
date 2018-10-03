@@ -90,6 +90,8 @@ module.exports = (rpc, conn, dbwrite) => {
   if (CONFIG.auth) {
     const checkJWT = require('./authMiddleware').verify;
     router.post('/posts', checkJWT, (req, res, next) => {
+      const auth0_id = req.user.sub
+      req.body.auth0_id = auth0_id;
       const rpcInput = rpcFactory('createForumPost', [
         _.pick(req.body, [
           'auth0_id',
@@ -107,11 +109,12 @@ module.exports = (rpc, conn, dbwrite) => {
         .catch(next);
     });
     router.post('/posts/:postId/comments', checkJWT, (req, res, next) => {
+      const auth0_id = req.user.sub
       var rpcInput = {
         method: 'createForumComment',
         params: [
           {
-            auth0_id: req.body.auth0_id,
+            auth0_id: auth0_id,
             responses: req.body.responses,
             post_id: req.params.postId
           }

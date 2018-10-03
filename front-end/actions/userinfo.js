@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import local from './axiosConfigInitial';
 import { browserHistory } from 'react-router';
 import { error } from './error';
 import { sendTempResponse, sendTempStimulusResponse } from './tempResponse';
@@ -140,17 +139,29 @@ export function sendTempId(id) {
     id
   };
 }
-export function getUserInfo() {
+
+export function getUserInfo(quiz) {
+  // this quiz name is used for the api endpoint when creating a temporary user
+  // if(!quiz) {
+  //   let msg = "Need a quiz name in order to determine API route";
+  //   console.error(msg)
+  //   throw new Error(msg)
+  // }
+
   // used for when a user is part ways through a quiz and we need to reassign their answers
   let accessToken = auth.getAccessToken();
   return (dispatch, getState) => {
+    // set this user to anonymous if no access token in state
     if (!accessToken) {
       return dispatch(
         loginSuccess({
-          anonymous: true
+          anonymous: true,
+          quiz: quiz
         })
       );
     }
+    // if there is an access token
+    // get that info from auth0
     return new Promise((res, rej) => {
       auth.lock.getUserInfo(accessToken, (error, profile) => {
         if (error) {
@@ -160,6 +171,7 @@ export function getUserInfo() {
       });
     })
       .then(profile => {
+        // load the extra metadata from auth0
         return auth.getUserMetadata(profile.sub).then(meta => {
           if (!meta) {
             return auth.updateUser({}, profile.sub).then(resp => {
@@ -180,75 +192,97 @@ export function getUserInfo() {
         });
       })
       .then(profile => {
-        const tempId = localStorage.getItem('tempUser');
-        return local
-          .post('/createUser', { auth0_id: profile.user_id, user_id: tempId })
-          .then(res => {
-            //comment get this back to the way it was
-            dispatch(
-              loginSuccess({
+        // if you give it a quiz
+        if(typeof quiz === 'string') {
+          // create user and reassign answers
+          const tempId = localStorage.getItem('tempUser');
+          // create a quiz user
+          return localAxios
+            .post(`${quiz}/createUser`, { auth0_id: profile.user_id, user_id: tempId })
+            .then(res => {
+              //comment get this back to the way it was
+              dispatch(
+                loginSuccess({
+                  ...profile,
+                  ...res.data,
+                  quiz: quiz
+                })
+              );
+              return {
                 ...profile,
-                ...res.data
-              })
-            );
-            return {
-              ...profile,
-              ...res.data
-            };
-          })
-          .then(data => {
-            const tempUser = localStorage.getItem('tempUser');
-            const tempResponses = getState().tempResponses.tempResponse;
-            const tempStimulusResponse = getState().tempStimulusResponse;
-            var p = [];
-            if (tempUser) {
-              if (tempResponses) {
-                tempResponses.map(response => {
-                  response.user_id = data.id;
-                  return local.post('/response', response).then(res => res.data)
-                }).forEach(promise => {
-                  return p.push(promise)
-                });
+                ...res.data,
+                quiz: quiz
+              };
+            })
+            .then(data => {
+              // reassign the responses
+              const tempUser = localStorage.getItem('tempUser');
+              const tempResponses = getState().tempResponses.tempResponse;
+              const tempStimulusResponse = getState().tempStimulusResponse;
+              var p = [];
+              if (tempUser) {
+                if (tempResponses) {
+                  tempResponses.map(response => {
+                    response.user_id = data.id;
+                    return localAxios.post(`${quiz}/response`, response).then(res => res.data)
+                  }).forEach(promise => {
+                    return p.push(promise)
+                  });
+                }
+                if (tempStimulusResponse) {
+                  tempStimulusResponse.map(response => {
+                    response.user_id = data.id;
+                    return localAxios.post(`${quiz}/stimulusResponse`, response).then(res => res.data)
+                  }).forEach(promise => {
+                    p.push(promise);
+                  });
+                }
               }
-              if (tempStimulusResponse) {
-                tempStimulusResponse.map(response => {
-                  response.user_id = data.id;
-                  return local.post('/stimulusResponse', response).then(res => res.data)
-                }).forEach(promise => {
-                  p.push(promise);
-                });
-              }
-            }
-            return Promise.all(p).then(() => {
-              return tempUser;
-            });
-          })
-          .then(tempUser => {
-            if (tempUser) {
-              return local.post('/deleteUser', { id: tempUser }).then(data => {
-                dispatch(sendTempResponse([]));
-                dispatch(sendTempStimulusResponse([]));
-                localStorage.removeItem('tempUser');
+              return Promise.all(p).then(() => {
+                return tempUser;
               });
-            }
-          });
+            })
+            .then(tempUser => {
+              // then delete the original responses
+              if (tempUser) {
+                return localAxios.post(`${quiz}/deleteUser`, { id: tempUser }).then(data => {
+                  dispatch(sendTempResponse([]));
+                  dispatch(sendTempStimulusResponse([]));
+                  localStorage.removeItem('tempUser');
+                });
+              }
+            });
+        } else {
+          return dispatch(loginSuccess(profile));
+        }
+        // now that have a full auth0 user
       })
       .catch(error => {
         return dispatch(loginError(error));
       });
   };
 }
-export function generateAnonymousUser() {
+export function generateAnonymousUser(quiz) {
+  if(!quiz) {
+    let msg = "Need a quiz name in order to determine API route";
+    console.error(msg)
+    throw new Error(msg)
+  }
   return dispatch => {
-    return local.post('/createUser').then(resp => {
-      localStorage.setItem('tempUser', resp.data.id);
-      return dispatch(loginSuccess(resp.data));
+    return localAxios.post(`${quiz}/createUser`).then(({ data }) => {
+      localStorage.setItem('tempUser', data.id);
+      return dispatch(loginSuccess({ ...data, quiz }));
     });
   };
 }
-export function updateUserWithAuth0Id(auth0_id, user_id) {
+export function updateUserWithAuth0Id(auth0_id, user_id,quiz) {
+  if(!quiz) {
+    let msg = "Need a quiz name in order to determine API route";
+    console.error(msg)
+    throw new Error(msg)
+  }
   return dispatch => {
-    return local.put(`/users/${auth0_id}`, { user_id: user_id }).then(resp => {
+    return localAxios.put(`${quiz}/users/${auth0_id}`, { user_id: user_id }).then(resp => {
       return dispatch(loginSuccess(resp.data));
     });
   };

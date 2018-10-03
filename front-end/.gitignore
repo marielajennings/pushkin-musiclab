@@ -1,0 +1,7 @@
+node_modules
+boilerplate_documentation
+public/dist/**
+public/index.html
+
+
+

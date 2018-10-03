@@ -1,10 +1,10 @@
 import Axios from 'axios';
 
-const axiosListenerQuiz = Axios.create({
+const axiosFC = Axios.create({
   baseURL:
     process.env.NODE_ENV === 'production'
-      ? '/api/listener-quiz'
-      : '//localhost/api/listener-quiz'
+      ? '/api/fc'
+      : '//localhost/api/fc'
 });
 
-module.exports = axiosListenerQuiz;
+module.exports = axiosFC;

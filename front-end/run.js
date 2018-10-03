@@ -18,10 +18,10 @@ const webpack = require('webpack');
 
 // TODO: Update configuration settings
 const config = {
-  title: 'Your Project',        // Your website title
-  url: '',          // Your website URL
-  project: '',      // Firebase project. See README.md -> How to Deploy
-  trackingID: 'UA-3271533-1',                 // Google Analytics Site's ID
+  title: 'Games With Words', // Your website title
+  url: 'https://d7gvdmeqbqrlo.cloudfront.net/', // Your website URL
+  project: 'gameswithwords', // Firebase project. See README.md -> How to Deploy
+  trackingID: 'UA-3271533-1' // Google Analytics Site's ID
 };
 
 const tasks = new Map(); // The collection of automation tasks ('clean', 'build', 'publish', etc.)
@@ -29,25 +29,40 @@ const tasks = new Map(); // The collection of automation tasks ('clean', 'build'
 function run(task) {
   const start = new Date();
   console.log(`Starting '${task}'...`);
-  return Promise.resolve().then(() => tasks.get(task)()).then(() => {
-    console.log(`Finished '${task}' after ${new Date().getTime() - start.getTime()}ms`);
-  }, err => console.error(err.stack));
+  return Promise.resolve()
+    .then(() => tasks.get(task)())
+    .then(
+      () => {
+        console.log(
+          `Finished '${task}' after ${new Date().getTime() - start.getTime()}ms`
+        );
+      },
+      err => console.error(err.stack)
+    );
 }
 
 //
 // Clean up the output directory
 // -----------------------------------------------------------------------------
-tasks.set('clean', () => del(['public/dist/*', '!public/dist/.git'], { dot: true }));
+tasks.set('clean', () =>
+  del(['public/dist/*', '!public/dist/.git'], { dot: true })
+);
 
 //
 // Copy ./index.html into the /public folder
 // -----------------------------------------------------------------------------
 tasks.set('html', () => {
   const webpackConfig = require('./webpack.config');
-  const assets = JSON.parse(fs.readFileSync('./public/dist/assets.json', 'utf8'));
+  const assets = JSON.parse(
+    fs.readFileSync('./public/dist/assets.json', 'utf8')
+  );
   const template = fs.readFileSync('./public/index.ejs', 'utf8');
   const render = ejs.compile(template, { filename: './public/index.ejs' });
-  const output = render({ debug: webpackConfig.debug, bundle: assets.main.js, config });
+  const output = render({
+    debug: webpackConfig.debug,
+    bundle: assets.main.js,
+    config
+  });
   fs.writeFileSync('./public/index.html', output, 'utf8');
 });
 
@@ -90,7 +105,7 @@ tasks.set('build', () => {
     .then(() => run('clean'))
     .then(() => run('bundle'))
     .then(() => run('html'));
-    // .then(() => run('sitemap'));
+  // .then(() => run('sitemap'));
 });
 
 //
@@ -99,21 +114,24 @@ tasks.set('build', () => {
 tasks.set('publish', () => {
   global.DEBUG = process.argv.includes('--debug') || false;
   const s3 = require('s3');
-  return run('build').then(() => new Promise((resolve, reject) => {
-    const client = s3.createClient({
-      s3Options: {
-        region: 'us-east-1',
-        sslEnabled: true,
-      },
-    });
-    const uploader = client.uploadDir({
-      localDir: 'public',
-      deleteRemoved: true,
-      s3Params: { Bucket: '' }, // TODO: Update deployment URL
-    });
-    uploader.on('error', reject);
-    uploader.on('end', resolve);
-  }));
+  return run('build').then(
+    () =>
+      new Promise((resolve, reject) => {
+        const client = s3.createClient({
+          s3Options: {
+            region: 'us-east-1',
+            sslEnabled: true
+          }
+        });
+        const uploader = client.uploadDir({
+          localDir: 'public',
+          deleteRemoved: true,
+          s3Params: { Bucket: 'gameswithwords' } // TODO: Update deployment URL
+        });
+        uploader.on('error', reject);
+        uploader.on('end', resolve);
+      })
+  );
 });
 
 //
@@ -122,44 +140,62 @@ tasks.set('publish', () => {
 tasks.set('start', () => {
   let count = 0;
   global.HMR = !process.argv.includes('--no-hmr'); // Hot Module Replacement (HMR)
-  return run('clean').then(() => new Promise(resolve => {
-    const bs = require('browser-sync').create();
-    const webpackConfig = require('./webpack.config');
-    const compiler = webpack(webpackConfig);
-    // Node.js middleware that compiles application in watch mode with HMR support
-    // http://webpack.github.io/docs/webpack-dev-middleware.html
-    const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
-      publicPath: webpackConfig.output.publicPath,
-      stats: webpackConfig.stats,
-    });
-    compiler.plugin('done', stats => {
-      // Generate index.html page
-      const bundle = stats.compilation.chunks.find(x => x.name === 'main').files[0];
-      const template = fs.readFileSync('./public/index.ejs', 'utf8');
-      const render = ejs.compile(template, { filename: './public/index.ejs' });
-      const output = render({ debug: true, bundle: `/dist/${bundle}`, config });
-      fs.writeFileSync('./public/index.html', output, 'utf8');
+  return run('clean').then(
+    () =>
+      new Promise(resolve => {
+        const bs = require('browser-sync').create();
+        const webpackConfig = require('./webpack.config');
+        const compiler = webpack(webpackConfig);
+        // Node.js middleware that compiles application in watch mode with HMR support
+        // http://webpack.github.io/docs/webpack-dev-middleware.html
+        const webpackDevMiddleware = require('webpack-dev-middleware')(
+          compiler,
+          {
+            publicPath: webpackConfig.output.publicPath,
+            stats: webpackConfig.stats
+          }
+        );
+        compiler.plugin('done', stats => {
+          // Generate index.html page
+          const bundle = stats.compilation.chunks.find(x => x.name === 'main')
+            .files[0];
+          const template = fs.readFileSync('./public/index.ejs', 'utf8');
+          const render = ejs.compile(template, {
+            filename: './public/index.ejs'
+          });
+          const output = render({
+            debug: true,
+            bundle: `/dist/${bundle}`,
+            config
+          });
+          fs.writeFileSync('./public/index.html', output, 'utf8');
 
-      // Launch Browsersync after the initial bundling is complete
-      // For more information visit https://browsersync.io/docs/options
-      if (++count === 1) {
-        bs.init({
-          port: process.env.PORT || 8000,
-          ui: { port: Number(process.env.PORT || 8000) + 1 },
-          notify: false,
-          server: {
-            baseDir: 'public',
-            middleware: [
-              webpackDevMiddleware,
-              require('webpack-hot-middleware')(compiler),
-              require('connect-history-api-fallback')(),
-            ],
-          },
-        }, resolve);
-      }
-    });
-  }));
+          // Launch Browsersync after the initial bundling is complete
+          // For more information visit https://browsersync.io/docs/options
+          if (++count === 1) {
+            bs.init(
+              {
+                port: process.env.PORT || 8000,
+                ui: { port: Number(process.env.PORT || 8000) + 1 },
+                notify: false,
+                server: {
+                  baseDir: 'public',
+                  middleware: [
+                    webpackDevMiddleware,
+                    require('webpack-hot-middleware')(compiler),
+                    require('connect-history-api-fallback')()
+                  ]
+                }
+              },
+              resolve
+            );
+          }
+        });
+      })
+  );
 });
 
 // Execute the specified task or default one. E.g.: node run build
-run(/^\w/.test(process.argv[2] || '') ? process.argv[2] : 'start' /* default */);
+run(
+  /^\w/.test(process.argv[2] || '') ? process.argv[2] : 'start' /* default */
+);

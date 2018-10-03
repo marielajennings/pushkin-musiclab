@@ -8,9 +8,7 @@ class DashboardForum extends React.Component {
     this.state = { postIds: null };
   }
   componentDidMount() {
-    this.props.getUserPostIds(this.props.user).then(res => {
-      this.setState({ posts: res });
-    });
+    this.props.getUserPostIds(this.props.user)
   }
   showLinks(posts) {
     return posts.map(post => {
@@ -39,7 +37,7 @@ class DashboardForum extends React.Component {
     return (
       <div>
         <h3>Attended forum posts</h3>
-        <div>{this.state.posts && this.showLinks(this.state.posts)}</div>
+        <div>{this.props.posts && this.showLinks(this.props.posts)}</div>
       </div>
     );
   }

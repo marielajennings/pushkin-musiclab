@@ -8,9 +8,9 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import { Row, Col, Image } from "react-bootstrap";
-import React, { PropTypes } from "react";
-import s from "./styles.css";
+import { Row, Col, Image } from 'react-bootstrap';
+import React from 'react';
+import s from './styles.css';
 
 class HomePage extends React.Component {
   render() {
@@ -20,7 +20,7 @@ class HomePage extends React.Component {
           <Row className={s.display}>
             <Col sm={12} lg={6} className={s.textCenter}>
               <Image
-                src={require("../../gif/3.gif")}
+                src={require('../../gif/3.gif')}
                 responsive
                 className={s.gif}
               />
@@ -42,21 +42,21 @@ class HomePage extends React.Component {
           <Row className={s.display}>
             <Col lg={1} />
             <Col lg={5} className={s.textCenter}>
-              <p className={s.title} style={{ marginTop: "90px" }}>
+              <p className={s.title} style={{ marginTop: '90px' }}>
                 <b>Collaborate with citizen scientists.</b>
               </p>
               <p className={s.blurb}>
-                It doesn't matter who you are. Join our interdisciplinary team
+                {`It doesn't matter who you are. Join our interdisciplinary team
                 of psychologists, computer scientists, and linguists today.
                 Whether it's contributing to our blog or posting a question in
                 the forum, you can advance science and mingle with people who
-                are just as interested in research as you are.
+                are just as interested in research as you are.`}
               </p>
             </Col>
             <Col lg={6} className={s.textCenter}>
               <Image
-                style={{ marginTop: "90px" }}
-                src={require("../../gif/2.gif")}
+                style={{ marginTop: '90px' }}
+                src={require('../../gif/2.gif')}
                 responsive
                 className={s.gif}
               />
@@ -67,7 +67,7 @@ class HomePage extends React.Component {
           <Row className={s.display}>
             <Col sm={12} lg={6} className={s.textCenter}>
               <Image
-                src={require("../../gif/1.gif")}
+                src={require('../../gif/1.gif')}
                 responsive
                 className={s.gif}
               />

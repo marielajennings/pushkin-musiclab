@@ -11,6 +11,8 @@ module.exports = function (conn, q, body) {
             const corr = generateUuid();
             ch.consume(REPLY_QUEUE,
               msg => {
+                console.log("From DB-Worker RPC")
+                console.log(msg)
                 if (msg.properties.correlationId == corr) {
                   const content = JSON.parse(msg.content.toString('utf8'));
                   resolve(content)
@@ -26,6 +28,8 @@ module.exports = function (conn, q, body) {
               contentType: 'application/json',
               contentEncoding: 'utf-8'
             };
+            console.log("From DB-Worker RPC - Payload")
+            console.log(payload)
             return ch.sendToQueue(q,
               payload, options
             )

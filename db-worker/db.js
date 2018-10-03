@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 // create the actual db connection
 const knex = require('knex')(require('./knexfile.js').development);
 // config for transaction DB
@@ -25,8 +27,6 @@ knex.on('query-response', function(one, two, three) {
     .then();
 });
 
-const fs = require('fs');
-
 // registry plugin to handle models that reference each other
 // require all models and pass in db connection
 
@@ -43,7 +43,9 @@ modelDirectories.forEach(function(folder) {
     bookshelf.plugin('registry');
     const models = fs.readdirSync(`./models/${folder}`);
     models.forEach(model => {
-      require(`./models/${folder}/${model}`)(bookshelf);
+      if (path.extname(model) === ".js") {
+        require(`./models/${folder}/${model}`)(bookshelf);
+      }
     });
     modelObj[folder] = bookshelf;
   }

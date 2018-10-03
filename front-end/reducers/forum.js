@@ -83,13 +83,32 @@ export default function forum(state = initialState, action) {
         posts: state.posts.filter(comment => comment.id != action.id)
       }
 
-      case REMOVE_COMMENT: 
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.filter(comment => comment.id != action.id)
+      }
+    case 'UPDATE_POST':
+      // find the post and update it
+      let index = state.posts.findIndex(post => post.id === action.post.id);
+      if(index >= 0) {
         return {
           ...state,
-          comments: state.comments.filter(comment => comment.id != action.id)
+          posts: [
+          ...state.posts.slice(0, index),
+          {
+            ...state.posts[index],
+            ...action.post
+          },
+          ...state.posts.slice(index + 1)
+          ]
         }
-      
-
+      } else {
+        return {
+          ...state,
+          posts: [...state.posts, action.post]
+        }
+      }
     default:
       return state;
   }

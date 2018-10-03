@@ -158,7 +158,6 @@ function Worker() {
       this[`${quiz}.raw`] = query => {
         return db.knex
           .raw(query)
-          .debug()
           .then(resp => resp.rows)
       };
       /**

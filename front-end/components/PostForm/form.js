@@ -20,12 +20,25 @@ const SimpleForm = props => {
       event.stopPropagation();
     }
   };
+
+  let trial_index 
+
+  if ( data && data.question) {
+    trial_index = data.question.trial_index
+  } else if (data){ 
+    trial_index = data.trial_index
+  } else {
+    trial_index = '';
+  }
+
+
+
   return (
     <form onSubmit={handleSubmit} className={s['post-form']}>
       {!fromForum && (
         <div>
           <label>
-            Post a question about {quiz} Q{data.question.trial_index}
+            Post a question about {quiz} Q{trial_index}
           </label>
         </div>
       )}

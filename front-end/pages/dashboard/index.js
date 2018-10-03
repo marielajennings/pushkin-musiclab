@@ -1,12 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import DashboardNav from '../../components/DashboardNav/index';
-import s from './styles.css';
-import DashboardForum from '../../components/DashboardForum/index';
-import DashboardProfile from '../../components/DashboardProfile/index';
-import baseUrl from '../../core/baseUrl';
-
+import DashboardNav from "../../components/DashboardNav/index";
+import s from "./styles.css";
+import DashboardForum from "../../components/DashboardForum/index";
+import DashboardProfile from "../../components/DashboardProfile/index";
+import baseUrl from "../../core/baseUrl";
+import localAxios from "../../actions/localAxios";
+import BadgeHolder from "../../components/LeaderBoardComponents/BadgeHolder";
 import {
   checkLogin,
   login,
@@ -16,19 +17,23 @@ import {
   updateUser,
   resetPassword,
   loginLocation
-} from '../../actions/userinfo';
-import { getUserPostIds } from '../../actions/forum';
+} from "../../actions/userinfo";
+import { getUserPostIds } from "../../actions/forum";
+
+const QUIZ_NAMES = ["bloodmagic"];
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       profile: null,
-      section: null
+      section: null,
+      badgeData: []
     };
     this.dispatchCheckLogin();
   }
   dispatchCheckLogin = () => {
-    this.props.dispatch(loginLocation('/dashboard'));
+    this.props.dispatch(loginLocation("/dashboard"));
     this.props.dispatch(checkLogin());
   };
   logout = () => {
@@ -40,6 +45,38 @@ class Dashboard extends React.Component {
   updateUser = (payload, userId) => {
     this.props.dispatch(updateUser(payload, userId));
   };
+  fetchUserId = quiz_name => {
+    return localAxios
+      .post(`/${quiz_name}/createUser`, {
+        auth0_id: this.props.userInfo.profile.user_id
+      })
+      .then(({ data: { id } }) => {
+        return {
+          quiz_name,
+          id
+        };
+      });
+  };
+  fetchResponseCount = ({ quiz_name, id }) => {
+    return localAxios
+      .get(`/${quiz_name}/questionsAnswered`, {
+        params: {
+          user_id: id
+        }
+      })
+      .then(({ data: { count } }) => ({ quiz_name, count }));
+  };
+  componentDidUpdate() {
+    if (this.state.badgeData.length < 1) {
+      if (this.props.userInfo.profile) {
+        Promise.all(QUIZ_NAMES.map(this.fetchUserId))
+          .then(arr => Promise.all(arr.map(this.fetchResponseCount)))
+          .then(data => {
+            this.setState({ badgeData: data });
+          });
+      }
+    }
+  }
   componentWillMount() {
     this.showProfile();
   }
@@ -63,10 +100,13 @@ class Dashboard extends React.Component {
   setSection = section => {
     this.setState({ section });
   };
+  getUserPosts = user => {
+    this.props.dispatch(getUserPostIds(user));
+  };
   showContent = () => {
     const { profile } = this.state;
     switch (this.state.section) {
-      case 'profile':
+      case "profile":
         return (
           <DashboardProfile
             profile={profile.user_metadata}
@@ -79,14 +119,15 @@ class Dashboard extends React.Component {
             updateLocalProfile={this.updateLocalProfile}
           />
         );
-      case 'subscriptions':
+      case "subscriptions":
         return <div>Subscriptions Coming soon ... </div>;
-      case 'forum':
+      case "forum":
         return (
           <DashboardForum
-            getUserPostIds={getUserPostIds}
-            user={this.props.userInfo.profile.auth0_id}
+            getUserPostIds={this.getUserPosts}
+            user={this.props.userInfo.profile.user_id}
             baseUrl={baseUrl}
+            posts={this.props.userPosts}
           />
         );
       default:
@@ -111,7 +152,7 @@ class Dashboard extends React.Component {
       <div className="styles_blurb_3jf">
         {authenticated &&
           profile && (
-            <div className={s['dashboard-nav']}>
+            <div className={s["dashboard-nav"]}>
               <div className={s.section}>
                 <DashboardNav
                   setSection={this.setSection}
@@ -120,13 +161,18 @@ class Dashboard extends React.Component {
                 />
               </div>
               <div className={s.content}>{this.showContent()}</div>
+              <div>
+                {this.state.badgeData.map(data => (
+                  <BadgeHolder name={data.quiz_name} count={data.count} />
+                ))}
+              </div>
             </div>
           )}
         {!authenticated && (
-          <h4 style={{ textAlign: 'center' }}>
-            Please{' '}
-            <a style={{ cursor: 'pointer' }} onClick={login}>
-              Log In{' '}
+          <h4 style={{ textAlign: "center" }}>
+            Please{" "}
+            <a style={{ cursor: "pointer" }} onClick={login}>
+              Log In{" "}
             </a>
             to view your dashboard.
           </h4>
@@ -135,5 +181,18 @@ class Dashboard extends React.Component {
     );
   }
 }
+function mapStateToProps(state, ownProps) {
+  let userPosts = [];
+  if (state.userInfo.profile) {
+    const auth0_id = state.userInfo.profile.user_id;
+    userPosts = state.forum.posts.filter(post => {
+      return post.auth0_id == auth0_id;
+    });
+  }
+  return {
+    ...state,
+    userPosts: userPosts
+  };
+}
 
-export default connect(state => state)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);

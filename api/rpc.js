@@ -17,13 +17,15 @@ module.exports = function (conn, channelName, body) {
           // When the connection is closed it sends a blank message
           // check to make sure this isnt that
           if (msg) {
-            const content = JSON.parse(msg.content.toString('utf8'));
-            winston.info('received', content);
-            if (msg.properties.correlationId === corr) {
-              ch.close();
-              resolve(content);
+            console.log("From API RPC")
+            console.log(msg)
+                if (msg.properties.correlationId === corr) {
+                  const content = JSON.parse(msg.content.toString('utf8'));
+                  winston.info('received', content);
+                  ch.close();
+                  resolve(content);
+                }
             }
-          }
         },
         {
           noAck: true

@@ -18,7 +18,12 @@ import Forum from '../pages/forum/index';
 import ForumQuestion from '../components/ForumPostContent/index';
 import Admin from '../pages/admin/index';
 import Auth from './auth';
+
+
 import FC from '../experiments/fc/index';
+
+
+
 // Pass in a component, and the quiz name
 import ForumWrapper from '../components/ForumWrapper/index';
 
@@ -90,16 +95,6 @@ export const routes = (
     <Route path="/quizzes" component={Quizzes} />
     {/* note how we're ensuring that non mobile compatabile quizzes don't open on mobile devices or tablets */}
    
-
-
- <Route
-      path="/quizzes/fc"
-      component={FC}
-      onEnter={ensureDesktop}
-    />
-
-
-
     {CONFIG.auth && (
       <Route
         path="/dashboard"
@@ -111,6 +106,14 @@ export const routes = (
         <Route path="posts/:id" component={ForumQuestion} />
       </Route>
     )}
+
+
+     
+
+<Route path="/quizzes/fc" component={ForumWrapper(FC, 'fc', CONFIG)} />
+
+
+
     <Route path="/admin" component={Admin} />
     <Route path="/projects" component={Projects} />
     <Route path="/archive" component={Archive} />

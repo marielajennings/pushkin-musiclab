@@ -10,6 +10,15 @@ const api = Axios.create({
       : '//localhost/api'
 })
 
+function findUser(question, userProfile) {
+  const submitURL = question.submitURL;
+  let auth0_id = userProfile.user_id;
+  let url = `${submitURL.split('/')[0]}/users/${auth0_id}`
+  return api.get(url).then(res => {
+    return res.data;
+  });
+}
+
 class StaticQuestionContainer extends React.Component {
   componentDidMount() {
     //handle timeline base on if the question is saved as {question: {}, choices:{}}
@@ -42,8 +51,18 @@ class StaticQuestionContainer extends React.Component {
       const payload = {
         data_string: data
       }
+      if(data.questions) {
+        payload.stimulus = data.questions[0]
+      }
       if(this.props.userInfo) {
-        payload.user_id = this.props.userInfo.profile.id
+        return findUser(question, this.props.userInfo.profile)
+        .then(data => {
+          payload.user_id = data.id
+          return api.post(submitURL, payload)
+          .then(res => {
+            this.props.closeQuestion();
+          })
+        })
       }
       return api.post(submitURL, payload)
       .then(res => {

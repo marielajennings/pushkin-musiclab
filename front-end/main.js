@@ -20,6 +20,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { rootReducer } from './reducers/index';
 import thunkMiddleware from 'redux-thunk';
 import { compose, createStore, applyMiddleware } from 'redux';
+import { hot } from 'react-hot-loader';
 
 export default function configureStore(initialState) {
   const middleWares = [thunkMiddleware];
@@ -43,15 +44,20 @@ export default function configureStore(initialState) {
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
-
-function render(routes) {
-  FastClick.attach(document.body);
-  ReactDOM.render(
+const App = hot(module)(function({ routes }) {
+  return (
     <Provider store={store}>
       <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
         {routes}
       </Router>
-    </Provider>,
+    </Provider>
+  );
+});
+
+function render(routes) {
+  FastClick.attach(document.body);
+  ReactDOM.render(
+    <App routes={routes} />,
     document.getElementById('container')
   );
 }

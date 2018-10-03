@@ -6,6 +6,7 @@
 .modal-content h4 {
   text-align: center;
   padding: 5px;
+  margin: auto;
 }
 .modal-close {
   padding: 5px 5px 5px 10px;
