@@ -957,65 +957,48 @@ let reaction1
 
 
 
-
-
-
 var social1 = {
   type:'display-prediction',
-  prediction1:['percent goes here!'],
+  prediction1:[''],
   prediction2:[' '],
   buttonText:'Submit',
   quizURL:'https://www.themusiclab.org', //this will be the quiz URL for sharing
   subjectLine: 'Guessing what songs are used for.',
-  teaserPart1: function() {return '<div align="center"><b>About this research:</b></div><div align="left">&emsp;In previous research, we’ve found that adult listeners can accurately guess what a song is meant for, even if it is from an unfamiliar culture. In this quiz, we wanted to see how quickly people can guess meanings by listening to songs, as well as continue to test how accurate people are with each of the different songs.</div><br><br><div align="center"><b>Your results:</b><br>You got <b>'+count+'</b> out of 8 correct! Your average speed of guessing was '+reactionMean+' msecs</b>. You responded correctly more than '},
-  teaserPart2: " of people who have taken this quiz.</div>",
-  teaserPart3: " Do you think you can do better than me?",
+  teaserPart1: function() {return '<div align="center"><b>About this research:</b></div><div align="left">&emsp;In previous research, we’ve found that adult listeners can accurately guess what a song is meant for, even if it is from an unfamiliar culture. In this quiz, we wanted to see how quickly people can guess meanings by listening to songs, as well as continue to test how accurate people are with each of the different songs.</div><br><br><div align="center"><b>Your results:</b><br>You got <b>'+count+'</b> out of 8 correct! Your average speed of guessing was '+reactionMean+' msecs</b>. '},
+  teaserPart2: " ",
+  teaserPart3: " ",
   teaserShare: '<b>Click on a social media button to share your results!</b>',
-  socialPost1: function() {return 'When guessing what songs from around the world are used for, I got '+count+' correct! My average speed of guessing was '+reactionMean+' That\'s better than '},
+  socialPost1: function() {return 'When guessing what songs from around the world are used for, I got '+count+' correct! My average speed of guessing was '+reactionMean+'.'},
   socialSharing: true,
   encourageDemographics: ' ',
   fbButtonImg: `${baseUrl}/quizzes/fc/img/facebook.png`,
   twitterButtonImg: `${baseUrl}/quizzes/fc/img/twitter.png`,
   mailButtonImg: `${baseUrl}/quizzes/fc/img/mail.png`,
-  footer: '<br>Play again! (link to be added)<br>Play another quiz! (link to be added)<br><a href="http://www.themusiclab.org">Go back to our website</a>'
+  footer: ''
 };
 
 var self = this;
 
 var saveDataOnFinish= function(data){
-  console.log("Save triggered")
-  console.log(data)
   const toSend = data;
   return axiosFC
         .post('/stimulusResponse', {
         user_id: self.props.user.profile.id,
         data_string: toSend,
-        })
-       
+        })    
   
 };
 
 
-
-
-
-
-axiosFC
-      .post('/getAllStimuli')
-      .then(res => {
+new Promise((resolve, reject) => {
+    timeline.push(welcome1, ready1, songTest1, social1)
+    resolve();
+})
+     .then(() => {
         _this.hideLoading();
-        //user = self.props.user
-        console.log(self.props.user.profile.id)
-        console.log('this is the user')
-    
+        document.getElementById("jsPsychTarget").focus()
+        document.getElementById("jsPsychTarget").style.outline='none'
       })
-
-      .then(() => {
-        
-      timeline.push(welcome1, ready1, songTest1, social1)
-      //console.log('created timeline')
-      })
-
       .then(() => {
 
       jsPsych.init({
@@ -1028,33 +1011,8 @@ axiosFC
       });
       })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-        
+      
 
   render() {
     const loading = this.state.loading;
@@ -1076,9 +1034,7 @@ axiosFC
             />
 
             <div ref="preamble" id="preamble">
-              
-
-              <div style={{ display: loading ? 'none' : '' }}>
+            <div style={{ display: loading ? 'none' : '' }}>
                 <p className={s.title}>Guess the Song Type</p>
                 <hr className={s.divider} />
               </div>

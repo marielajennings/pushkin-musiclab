@@ -6,9 +6,7 @@ module.exports = db => {
     user: function() {
       return this.belongsTo('User', 'user_id', 'id');
     },
-    stimulus: function() {
-      return this.belongsTo('Stimulus', 'stimulus', 'stimulus')
-    }
+    
   });
   return db.model('StimulusResponse', StimulusResponse);
 };
