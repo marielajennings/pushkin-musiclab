@@ -21,7 +21,7 @@ import Auth from './auth';
 
 
 import FC from '../experiments/fc/index';
-
+//mport mobileFC from '../experiments/fc/index-mobile';
 
 
 // Pass in a component, and the quiz name
@@ -65,6 +65,16 @@ function isMobile() {
   })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
 }
+
+// function ensureDesktopFC(nextState, replace) {
+//   if (isMobile()) {
+//     replace({
+//       pathname: '/quizzes/mobile-fc'
+//     });
+//   }
+// }
+
+
 
 function ensureDesktop(nextState, replace) {
   // if (isMobile()) {

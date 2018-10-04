@@ -194,6 +194,8 @@ export function getUserInfo(quiz) {
       .then(profile => {
         // if you give it a quiz
         if(typeof quiz === 'string') {
+    console.log('ACTIONS')
+          if (quiz == 'mobilefc') {quiz = 'fc'}
           // create user and reassign answers
           const tempId = localStorage.getItem('tempUser');
           // create a quiz user

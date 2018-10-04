@@ -4944,3 +4944,33 @@
 {"user_id":4,"data_string":{"0":{"key":"s","label":"Expressing love"},"1":{"key":"f","label":"Dancing"},"2":{"key":"j","label":"Healing the sick"},"3":{"key":"l","label":"Soothing a baby"},"rt":344,"stimulus":"<p align=\"center\">How much did you like this song? <p> Use your keyboard to enter your response on a scale from 1 (\"hated it\") to 4 (\"loved it\").<br><br><b>You can also listen to the song again before answering:<br></b> <audio controls><source src=/quizzes/fc/audio/TML-RAW-035.mp3></audio></p><div align=\"center\" style=\"font-size:24pt\"><b>1&emsp;&emsp;2&emsp;&emsp;3&emsp;&emsp;4</div><div align=\"center\">Hate it&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Love it</b></div>","key_press":50,"trial_type":"html-keyboard-response","trial_index":32,"time_elapsed":10801,"internal_node_id":"0.0-2.0-2.7","keyNumbers":["S=key #83, F=key #70, J=key #74, L=key #76; 1=key #49, 2=key #50, 3=key #51, 4=key #52"]},"updated_at":"2018-10-03T20:26:29.364Z","created_at":"2018-10-03T20:26:29.364Z","id":102,"level":"info","message":"received","timestamp":"20:26:29"}
 {"level":"info","message":"/api/fc/stimulusResponse","timestamp":"20:26:29"}
 {"user_id":4,"data_string":{"0":{"key":"s","label":"Expressing love"},"1":{"key":"f","label":"Dancing"},"2":{"key":"j","label":"Healing the sick"},"3":{"key":"l","label":"Soothing a baby"},"rt":179,"stimulus":"/quizzes/fc/img/NHSDiscography-035-pic.jpg","key_press":50,"trial_type":"image-keyboard-response","trial_index":33,"time_elapsed":10980,"internal_node_id":"0.0-2.0-3.7","keyNumbers":["S=key #83, F=key #70, J=key #74, L=key #76; 1=key #49, 2=key #50, 3=key #51, 4=key #52"]},"updated_at":"2018-10-03T20:26:29.546Z","created_at":"2018-10-03T20:26:29.546Z","id":103,"level":"info","message":"received","timestamp":"20:26:29"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"16:51:33"}
+{"updated_at":"2018-10-04T16:51:33.697Z","created_at":"2018-10-04T16:51:33.697Z","id":5,"level":"info","message":"received","timestamp":"16:51:33"}
+{"level":"info","message":"/api/fc/stimulusResponse","timestamp":"16:52:08"}
+{"user_id":5,"data_string":{"test_part":"response","key":"j","correct_response":"Soothing a baby","trial_type":"audio-keyboard-response","trial_index":2,"time_elapsed":34555,"internal_node_id":"0.0-2.0-0.0","keyNumbers":["S=key #83, F=key #70, J=key #74, L=key #76; 1=key #49, 2=key #50, 3=key #51, 4=key #52"],"correct":false},"updated_at":"2018-10-04T16:52:08.487Z","created_at":"2018-10-04T16:52:08.487Z","id":104,"level":"info","message":"received","timestamp":"16:52:08"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"16:52:12"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:05:18"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:05:35"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:08:02"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:10:07"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"17:10:24"}
+{"updated_at":"2018-10-04T17:10:24.459Z","created_at":"2018-10-04T17:10:24.459Z","id":6,"level":"info","message":"received","timestamp":"17:10:24"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:11:35"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:13:52"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"17:28:11"}
+{"updated_at":"2018-10-04T17:28:11.261Z","created_at":"2018-10-04T17:28:11.261Z","id":7,"level":"info","message":"received","timestamp":"17:28:11"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"17:29:13"}
+{"updated_at":"2018-10-04T17:29:13.141Z","created_at":"2018-10-04T17:29:13.141Z","id":8,"level":"info","message":"received","timestamp":"17:29:13"}
+{"level":"info","message":"/api/mobilefc/createUser","timestamp":"17:30:38"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:06:31"}
+{"updated_at":"2018-10-04T18:06:31.959Z","created_at":"2018-10-04T18:06:31.959Z","id":9,"level":"info","message":"received","timestamp":"18:06:31"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:08:13"}
+{"updated_at":"2018-10-04T18:08:13.276Z","created_at":"2018-10-04T18:08:13.276Z","id":10,"level":"info","message":"received","timestamp":"18:08:13"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:08:37"}
+{"updated_at":"2018-10-04T18:08:37.318Z","created_at":"2018-10-04T18:08:37.318Z","id":11,"level":"info","message":"received","timestamp":"18:08:37"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:10:30"}
+{"updated_at":"2018-10-04T18:10:30.577Z","created_at":"2018-10-04T18:10:30.577Z","id":12,"level":"info","message":"received","timestamp":"18:10:30"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:10:48"}
+{"updated_at":"2018-10-04T18:10:48.649Z","created_at":"2018-10-04T18:10:48.649Z","id":13,"level":"info","message":"received","timestamp":"18:10:48"}
+{"level":"info","message":"/api/fc/createUser","timestamp":"18:15:35"}
+{"updated_at":"2018-10-04T18:15:35.870Z","created_at":"2018-10-04T18:15:35.870Z","id":14,"level":"info","message":"received","timestamp":"18:15:35"}
