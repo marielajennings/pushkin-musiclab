@@ -762,7 +762,7 @@ img.push(new_img)
 
 
 
-console.log('fadsfdsafedafdadfrfddedfasedafs')
+
 
 
 /* songs and function */
@@ -927,7 +927,7 @@ var songTest1 = {
         reaction1 = jsPsych.data.get().select('rt');
         songPlay1 = data.stimulus;
         correctResp1 = data.correct_response;
-        console.log('stuff')
+        console.log(data)
         saveDataOnFinish(data);
     
       }
@@ -1014,6 +1014,27 @@ var saveDataOnFinish= function(data){
 };
 
 
+var test = {
+      type: 'audio-keyboard-response',
+      prompt: 'Test',
+      choices: [keyData[0].key, keyData[1].key, keyData[2].key, keyData[3].key],
+      stimulus: `${baseUrl}/quizzes/fc/audio/TML-RAW-021.mp3`,
+      data: {test_part: 'response', key: lullaby, correct_response: 'Soothing a baby'},
+    
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
 new Promise((resolve, reject) => {
     timeline.push(welcome1, ready1, songTest1, social1)
     resolve();
@@ -1027,6 +1048,8 @@ new Promise((resolve, reject) => {
 
       jsPsych.init({
           timeline: timeline,
+          preload_audio: tracks,
+          use_webaudio: false,
          display_element: this.refs.jsPsychTarget,
           on_finish: function() {
             jsPsych.data.displayData();
@@ -1842,18 +1865,18 @@ var song_list = jsPsych.randomization.sampleWithoutReplacement(song_data, 8);
 
 var welcome2 = {
   type: 'html-button-response',
-  stimulus: '<p align="left" style="font-size:3em; line-height:60px">This quiz is part of research conducted by scientists at Harvard University. We are studying how people make sense of the world, including the things they see and hear, the people they interact with, and the abstract worlds of music, arts, and other areas of cognition.</p><p align="left" style="font-size:3em; line-height:60px">This research has no known risks or anticipated direct benefits. Your participation in this research is completely voluntary. You can end your participation at any time.</p><p align="left" style="font-size:3em; line-height:60px">Your participation is completely anonymous. The results and data from this study will be shared with the public. After the quiz, we will explain several ways to be informed. You can also find this information on the main page of this website. At the end of the quiz, there will be the option to share your results on social media.</p><p align="left" style="font-size:3em; '+'line-height:60px">If you have questions or problems, you can contact us at musiclab+q@g.harvard.edu. By proceeding, you agree to participate in this study.</p><p align="left" style="font-size:3em; line-height:60px">Thank you for your interest.<br>The Music Lab at Harvard University<p>',
+  stimulus: '<p align="left">This quiz is part of research conducted by scientists at Harvard University. We are studying how people make sense of the world, including the things they see and hear, the people they interact with, and the abstract worlds of music, arts, and other areas of cognition.</p><p align="left">This research has no known risks or anticipated direct benefits. Your participation in this research is completely voluntary. You can end your participation at any time.</p><p align="left">Your participation is completely anonymous. The results and data from this study will be shared with the public. After the quiz, we will explain several ways to be informed. You can also find this information on the main page of this website. At the end of the quiz, there will be the option to share your results on social media.</p><p align="left">If you have questions or problems, you can contact us at musiclab+q@g.harvard.edu. By proceeding, you agree to participate in this study.</p><p align="left">Thank you for your interest.<br>The Music Lab at Harvard University<p>',
   prompt1: ' ',
   prompt2: ' ',
-  choices: ['<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">Next</div>']
+  choices: ['<div>Next</div>']
 };
 
 var ready2 = {
   type: 'html-button-response',
-  stimulus: '<p align="left" style="font-size:3em; line-height:60px">In this study, you will listen to excerpts from songs and be asked to select what you think the song is used for:</p><p align="center" style="font-size:3em; line-height:60px"><b>'+buttons[0]+'<br><br>'+buttons[1]+'<br><br>'+buttons[2]+'<br><br>'+buttons[3]+'</b><br><br>Hit the button below when you are ready to begin!',
+  stimulus: '<p align="left">In this study, you will listen to excerpts from songs and be asked to select what you think the song is used for:</p><p align="center" ><b>'+buttons[0]+'<br><br>'+buttons[1]+'<br><br>'+buttons[2]+'<br><br>'+buttons[3]+'</b><br><br>Hit the button below when you are ready to begin!',
   prompt1: ' ',
   prompt2: ' ',
-  choices: ['<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">Begin!</div>']
+  choices: ['<div>Begin!</div>']
 };
 
 var songPlay2
@@ -1863,17 +1886,15 @@ var songTest2 = {
   timeline: [
     {
       type: 'audio-button-response-vert',
-      prompt1: '<p align="center" style="font-size:4em; line-height:70px">Please listen to the song excerpt.</p><p align="center" style="font-size:4em; line-height:60px">What do you think this song is used for?</p>',
+      prompt1: '<p align="center">Please listen to the song excerpt.</p><p align="center">What do you think this song is used for?</p>',
       prompt2: ' ',
       choices: buttons,
-      button_html: '<button class="jspsych-btn" style="font-size:3em; line-height:60px; margin-top:20px; margin-bottom:20px"><p style="margin-top:40px; margin-bottom:40px"><b>%choice%</b></p></button>',
+      button_html: '<button class="jspsych-btn" ><p style="margin-top:40px; margin-bottom:40px"><b>%choice%</b></p></button>',
       stimulus: jsPsych.timelineVariable('stimulus'),
       response_ends_trial: true,
       data: jsPsych.timelineVariable('data'),
       on_finish: function(data) {
         data.correct = data.response == data.correct_response;
-          console.log('The trial just ended.');
-          console.log(JSON.stringify(data));
           count = jsPsych.data.get().filter({correct: true}).count();
           reaction2 = jsPsych.data.get().select('rt');
           songPlay2 = data.stimulus;
@@ -1886,13 +1907,13 @@ var songTest2 = {
         var correct = jsPsych.data.get().last(1).values()[0].correct;
         var reaction2 = jsPsych.data.get().last(1).values()[0].rt;
         if(correct == true)
-          {return '<p style="font-size:4em; line-height:70px"><font color="#00cc00"><b>Correct!</b></font><br><br><b>'+correctResp2+'</b> is the correct use of the song. You responded in <b>'+reaction2+' msecs</b>!</p>'}
+          {return '<p><font color="#00cc00"><b>Correct!</b></font><br><br><b>'+correctResp2+'</b> is the correct use of the song. You responded in <b>'+reaction2+' msecs</b>!</p>'}
         else if(correct == false)
-          {return '<p style="font-size:4em; line-height:70px"><font color="red"><b>Incorrect.</b></font><br><br><b>'+correctResp2+'</b> is the correct use of the song. You responded in <b>'+reaction2+' msecs</b>.</p>'}
+          {return '<p><font color="red"><b>Incorrect.</b></font><br><br><b>'+correctResp2+'</b> is the correct use of the song. You responded in <b>'+reaction2+' msecs</b>.</p>'}
       },
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">continue</div>'],
+      choices: ['<div>continue</div>'],
       on_finish: function(data){
         reactionMean = jsPsych.data.get().filter({trial_type: 'audio-button-response-vert'}).select('rt').mean();
         
@@ -1900,8 +1921,8 @@ var songTest2 = {
     },
     {
       type: 'html-button-response',
-      stimulus: function(){return '<p align="center" style="font-size:4em; line-height:70px">On a scale from 1-4, how much did you like this song? 1 being "hated it" and 4 being "loved it.""<br><br><b>Hear the song again:<br></b> <audio controls><source src='+songPlay2+'></audio></p>'},
-      choices: ['<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">1</div>', '<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">2</div>', '<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">3</div>', '<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">4</div>'],
+      stimulus: function(){return '<p align="center">On a scale from 1-4, how much did you like this song? 1 being "hated it" and 4 being "loved it.""<br><br><b>Hear the song again:<br></b> <audio controls><source src='+songPlay2+'></audio></p>'},
+      choices: ['<div>1</div>', '<div>2</div>', '<div>3</div>', '<div>4</div>'],
       prompt1: 'Hate',
       prompt2: 'Love'
     },
@@ -1910,7 +1931,7 @@ var songTest2 = {
       stimulus: jsPsych.timelineVariable('image'),
       blurb: jsPsych.timelineVariable('blurb'),
       citation: jsPsych.timelineVariable('citation'),
-      choices: ['<div style="font-size:5em; margin-left:40px; margin-right:40px; margin-top:40px; margin-bottom:40px">Click to continue!</div>'],
+      choices: ['<div>Click to continue!</div>'],
       prompt1: ' ',
       response_ends_trial: true
     }
@@ -1972,6 +1993,8 @@ new Promise((resolve, reject) => {
       jsPsych.init({
           timeline: timeline,
          display_element: this.refs.jsPsychTarget,
+         preload_audio: tracks,
+          use_webaudio: false,
           on_finish: function() {
             jsPsych.data.displayData();
           },

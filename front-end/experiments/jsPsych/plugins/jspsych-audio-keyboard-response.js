@@ -91,7 +91,8 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
     // store response
     var response = {
       rt: null,
-      key: null
+      key: null,
+      stimulus: trial.stimulus
     };
 
     // function to end trial when it is time
