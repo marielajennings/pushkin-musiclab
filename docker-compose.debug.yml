@@ -101,6 +101,20 @@ services:
       - QUEUE=fc
     links:
       - message-queue
+  ids:
+    build:
+      context: ./workers/ids
+      dockerfile: Dockerfile
+    volumes:
+      - ./workers/ids:/usr/src/app
+    command: bash start.debug.sh
+    depends_on:
+      - message-queue
+    environment:
+      - AMPQ_ADDRESS=amqp://message-queue:5672
+      - QUEUE=ids
+    links:
+      - message-queue
   front-end:
     build:
       context: ./front-end

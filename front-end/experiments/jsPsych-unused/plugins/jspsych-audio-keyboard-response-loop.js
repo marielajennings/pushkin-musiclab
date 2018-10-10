@@ -1,21 +1,21 @@
 /**
- * jspsych-audio-countdown-keyboard-response
+ * jspsych-audio-keyboard-response
  * Josh de Leeuw
  *
- * plugin for playing an audio file and getting a keyboard response
+ * plugin for playing a LOOPED audio file and getting a keyboard response
  *
  * documentation: docs.jspsych.org
  *
  **/
 
-jsPsych.plugins["audio-countdown-keyboard-response"] = (function() {
+jsPsych.plugins["audio-keyboard-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('audio-countdown-keyboard-response', 'stimulus', 'audio');
+  jsPsych.pluginAPI.registerPreload('audio-keyboard-response', 'stimulus', 'audio');
 
   plugin.info = {
-    name: 'audio-countdown-keyboard-response',
+    name: 'audio-keyboard-response',
     description: '',
     parameters: {
       stimulus: {
@@ -36,12 +36,6 @@ jsPsych.plugins["audio-countdown-keyboard-response"] = (function() {
         pretty_name: 'Prompt',
         default: null,
         description: 'Any content here will be displayed below the stimulus.'
-      },
-      timer: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Timer',
-        default: null,
-        description: 'Counter until end of trial.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -76,29 +70,9 @@ jsPsych.plugins["audio-countdown-keyboard-response"] = (function() {
       var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
       audio.currentTime = 0;
     }
-//
-
-var seconds  = 13
-
-
-var myVar = setInterval (myTimer, 1000);
-
-function myTimer (){
-display_element.innerHTML = seconds;
-if (--seconds < 0) {
-        seconds = 0;
-
-     }
-}
-
-function myStopFunction() {
-    clearInterval(myVar);
-}
-
-
-
 
     // set up end event if trial needs it
+
     if(trial.trial_ends_after_audio){
       if(context !== null){
         source.onended = function() {
@@ -108,6 +82,7 @@ function myStopFunction() {
         audio.addEventListener('ended', end_trial);
       }
     }
+
     // show prompt if there is one
     if (trial.prompt !== null) {
       display_element.innerHTML = trial.prompt;
@@ -121,8 +96,6 @@ function myStopFunction() {
 
     // function to end trial when it is time
     function end_trial() {
-      //kill the timer so it does not interfere with future trials
-      myStopFunction()
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
@@ -176,6 +149,7 @@ function myStopFunction() {
       source.start(startTime);
     } else {
       audio.play();
+	  audio.loop = true;
     }
 
     // start the response listener

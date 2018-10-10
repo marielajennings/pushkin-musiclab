@@ -42,12 +42,18 @@ class QuizPage extends React.Component {
              
                    <p className={s.mb25}>
                     <Link className={s.title} to="/quizzes/fc">
-                      Guess the Song Type
+                      World Music Quiz
                     </Link>
+                     <br /> Listen to songs from around the world and guess what they are used for!
                     
                   </p>
 
-                  
+                        <p className={s.mb25}>
+                    <Link className={s.title} to="/quizzes/ids">
+                     Who's Listening?
+                    </Link>
+                    <br /> Guess whether voice recordings of singing and speaking are meant for a baby or an adult!
+                  </p>
 
                    
                   

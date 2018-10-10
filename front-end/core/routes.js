@@ -18,6 +18,7 @@ import Forum from '../pages/forum/index';
 import ForumQuestion from '../components/ForumPostContent/index';
 import Admin from '../pages/admin/index';
 import Auth from './auth';
+import IDS from '../experiments/ids/index'
 
 
 import FC from '../experiments/fc/index';
@@ -123,6 +124,9 @@ export const routes = (
 <Route path="/quizzes/fc" component={ForumWrapper(FC, 'fc', CONFIG)} />
 
 
+     
+
+<Route path="/quizzes/ids" component={ForumWrapper(IDS, 'ids', CONFIG)} />
 
     <Route path="/admin" component={Admin} />
     <Route path="/projects" component={Projects} />

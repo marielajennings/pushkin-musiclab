@@ -78,25 +78,30 @@ jsPsych.plugins["audio-countdown-keyboard-response"] = (function() {
     }
 //
 
-var seconds  = 13
-
-
-var myVar = setInterval (myTimer, 1000);
-
-function myTimer (){
-display_element.innerHTML = seconds;
-if (--seconds < 0) {
-        seconds = 0;
-
-     }
+//makes countdown until end of trial, based on 15 seconds
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        seconds = parseInt(timer % 60, 10);
+        display_element.innerHTML = seconds;
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
 }
-
+    var maxtimer = 14,
+        display = document.querySelector('#time');
+    startTimer(maxtimer, display);
+    display_element.innerHTML = display;
+//
+/*
+function myFunction() {
+    myVar = setTimeout(function(){ alert("Hello"); }, 3000);
+}
 function myStopFunction() {
-    clearInterval(myVar);
+    clear setTimer(display, 3000);
 }
-
-
-
+*/
 
     // set up end event if trial needs it
     if(trial.trial_ends_after_audio){
@@ -121,8 +126,6 @@ function myStopFunction() {
 
     // function to end trial when it is time
     function end_trial() {
-      //kill the timer so it does not interfere with future trials
-      myStopFunction()
 
       // kill any remaining setTimeout handlers
       jsPsych.pluginAPI.clearAllTimeouts();
