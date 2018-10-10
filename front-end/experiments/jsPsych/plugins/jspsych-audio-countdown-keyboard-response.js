@@ -1,5 +1,5 @@
 /**
- * jspsych-audio-keyboard-response
+ * jspsych-audio-countdown-keyboard-response
  * Josh de Leeuw
  *
  * plugin for playing an audio file and getting a keyboard response
@@ -8,14 +8,14 @@
  *
  **/
 
-jsPsych.plugins["audio-keyboard-response"] = (function() {
+jsPsych.plugins["audio-countdown-keyboard-response"] = (function() {
 
   var plugin = {};
 
-  jsPsych.pluginAPI.registerPreload('audio-keyboard-response', 'stimulus', 'audio');
+  jsPsych.pluginAPI.registerPreload('audio-countdown-keyboard-response', 'stimulus', 'audio');
 
   plugin.info = {
-    name: 'audio-keyboard-response',
+    name: 'audio-countdown-keyboard-response',
     description: '',
     parameters: {
       stimulus: {
@@ -36,6 +36,12 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         pretty_name: 'Prompt',
         default: null,
         description: 'Any content here will be displayed below the stimulus.'
+      },
+      timer: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Timer',
+        default: null,
+        description: 'Counter until end of trial.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -70,9 +76,34 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
       var audio = jsPsych.pluginAPI.getAudioBuffer(trial.stimulus);
       audio.currentTime = 0;
     }
+//
+
+//makes countdown until end of trial, based on 15 seconds
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        seconds = parseInt(timer % 60, 10);
+        display_element.innerHTML = seconds;
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+    var maxtimer = 14,
+        display = document.querySelector('#time');
+    startTimer(maxtimer, display);
+    display_element.innerHTML = display;
+//
+/*
+function myFunction() {
+    myVar = setTimeout(function(){ alert("Hello"); }, 3000);
+}
+function myStopFunction() {
+    clear setTimer(display, 3000);
+}
+*/
 
     // set up end event if trial needs it
-
     if(trial.trial_ends_after_audio){
       if(context !== null){
         source.onended = function() {
@@ -82,7 +113,6 @@ jsPsych.plugins["audio-keyboard-response"] = (function() {
         audio.addEventListener('ended', end_trial);
       }
     }
-
     // show prompt if there is one
     if (trial.prompt !== null) {
       display_element.innerHTML = trial.prompt;

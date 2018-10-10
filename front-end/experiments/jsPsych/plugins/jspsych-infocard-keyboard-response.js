@@ -32,17 +32,23 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
         default: jsPsych.ALL_KEYS,
         description: 'The keys the subject is allowed to press to respond to the stimulus.'
       },
-      prompt: {
+      blurb: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Prompt',
+        pretty_name: 'Blurb',
         default: null,
         description: 'Any content here will be displayed below the stimulus.'
       },
-      audio: {
+      citation: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Audio',
+        pretty_name: 'Citation',
         default: null,
-        description: 'Any content here will be displayed under the button.'
+        description: 'Any content here will be displayed below the stimulus.'
+      },
+      prompt1: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt1',
+        default: null,
+        description: 'Any content here will be displayed below the stimulus.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -67,20 +73,25 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-	  var new_html = '<table style="width:100%; border-spacing: 10px">'; 
-	  
-	  new_html += '<tr><th><img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus" style="max-width: 500px; float:left"></img></th>';
+	  var new_html = '<table style="width:1000px; border-spacing: 40px; border-collapse: separate">';
 
-    // add prompt
-    if (trial.prompt !== null){
-		new_html += '<th><p align="left">'+trial.prompt+'</p></th></table>';
+	  new_html += '<tr><td><img src="'+trial.stimulus+'" id="jspsych-image-keyboard-response-stimulus" width=500px style="max-width: 500px; float:left"></img></td>';
+
+    // add blurb
+    if (trial.blurb !== null){
+		new_html += '<td><p align="left">'+trial.blurb+'</p>';
     }
-	
-	//show audio if there is one
-    if (trial.audio !== null) {
-      new_html += trial.audio;
+
+    // add citation
+    if (trial.citation !== null){
+    new_html += '<p align="left"><b>Citation:</b> '+trial.citation+'</p>';
     }
-	
+
+    // add prompt1
+    if (trial.prompt1 !== null){
+    new_html += trial.prompt1;
+    }
+
     // draw
     display_element.innerHTML = new_html;
 

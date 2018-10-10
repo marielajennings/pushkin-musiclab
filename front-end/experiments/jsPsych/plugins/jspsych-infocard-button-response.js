@@ -38,17 +38,35 @@ jsPsych.plugins["image-button-response"] = (function() {
         array: true,
         description: 'The html of the button. Can create own style.'
       },
+      blurb: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Blurb',
+        default: null,
+        description: 'Any content here will be displayed below the stimulus.'
+      },
+      citation: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Citation',
+        default: null,
+        description: 'Any content here will be displayed below the stimulus.'
+      },
+      prompt1: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt1',
+        default: null,
+        description: 'Any content here will be displayed below the stimulus.'
+      },
       audio: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Audio',
         default: null,
         description: 'Any content here will be displayed under the button.'
       },
-      prompt: {
+      prompt2: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Prompt',
+        pretty_name: 'Prompt2',
         default: null,
-        description: 'Any content here will be displayed under the button.'
+        description: 'Any content here will be displayed below the stimulus.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
@@ -95,14 +113,29 @@ jsPsych.plugins["image-button-response"] = (function() {
     // display stimulus
     var html = '<br><br><img src="'+trial.stimulus+'" id="jspsych-image-button-response-stimulus" width=90%" style="max-width: 700px"></img>';
 
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      html += '<p style="font-size:4em; line-height:70px; float:right; margin-left: 10px">'+trial.prompt+'</p>';
+    //show blurb
+    if (trial.blurb !== null) {
+      html += '<p style="font-size:4em; line-height:70px; float:right; margin-left: 10px">'+trial.blurb+'</p>';
+    }
+
+    //show citation
+    if (trial.citation !== null) {
+      html += '<p style="font-size:3em; line-height:60px; float:right; margin-left: 10px"><b>Citation:</b> '+trial.citation+'</p>';
+    }
+
+    // add prompt1
+    if (trial.prompt1 !== null){
+    html += '<p style="font-size:4em; line-height:70px; float:right; margin-left: 10px">'+trial.prompt1+'</p>';
     }
 
 	//show audio if there is one
     if (trial.audio !== null) {
-      html += trial.audio;
+      html += '<p><audio controls><source src='+trial.audio+'></audio></p>';
+    }
+
+    // add prompt2
+    if (trial.prompt2 !== null){
+    html += '<p style="font-size:4em; line-height:70px; float:right; margin-left: 10px">'+trial.prompt2+'</p>';
     }
 
     //display buttons

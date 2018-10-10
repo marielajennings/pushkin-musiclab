@@ -15,7 +15,7 @@ jsPsych.plugins["audio-keyboard-response-training"] = (function() {
   jsPsych.pluginAPI.registerPreload('audio-keyboard-response-training', 'stimulus', 'audio');
 
   plugin.info = {
-    name: 'audio-keyboard-response-training',
+    name: 'audio-keyboard-response-training-training',
     description: '',
     parameters: {
       stimulus: {
