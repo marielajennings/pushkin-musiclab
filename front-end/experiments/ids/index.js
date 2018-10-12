@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-
 require('script-loader!../jsPsych/jspsych.js');
 require('script-loader!../jsPsych/plugins/jspsych-html-keyboard-response.js');
 require('script-loader!../jsPsych/plugins/jspsych-social-media.js');
 require('script-loader!../jsPsych/plugins/jspsych-survey-multi-select.js');
+
 require('script-loader!../jsPsych/plugins/jspsych-survey-multi-choice.js');
 require('script-loader!../jsPsych/plugins/jspsych-html-button-response2.js');
 require('script-loader!../jsPsych/plugins/jspsych-html-button-response2-vert.js');
@@ -17,6 +17,8 @@ require('script-loader!../jsPsych/plugins/jspsych-audio-imageButton-response-tra
 require('script-loader!../jsPsych/plugins/jspsych-audio-keyboard-response-training.js');
 
 
+//save data, reaction time problem, styles in general, mobile data
+//what;s up with the versions!
 
 
 
@@ -39,7 +41,6 @@ class IDS extends React.Component {
     this.hideLoading = this.hideLoading.bind(this);
     this.onResize = this.onResize.bind(this);
     window.addEventListener('resize', this.onResize.bind(this));
-    // this is an important workaround to clear any generated jspsych stuff that stays in the dom once even if you switch pages (because it's a single page app you're not actually switching pages, and also,  because jspysch generates dom nodes out of the scope of react, there's no automatic garbage collection). if you don't do do the following, there's a chance the experiment could accidentally carry on in the background.
     browserHistory.listen(() => {
       jsPsych.endExperiment();
       window.location.reload();
@@ -1211,7 +1212,9 @@ var welcome1 = {
   stimulus: '<p align="left">This quiz is part of research conducted by scientists at Harvard University. We are studying how people make sense of the world, including the things they see and hear, the people they interact with, and the abstract worlds of music, arts, and other areas of cognition.</p><p align="left">This research has no known risks or anticipated direct benefits. Your participation in this research is completely voluntary. You can end your participation at any time.</p><p align="left">Your participation is completely anonymous. The results and data from this study will be shared with the public. After the quiz, we will explain several ways to be informed. You can also find this information on the main page of this website. At the end of the quiz, there will be the option to share your results on social media.</p><p align="left">If you have questions or problems, you can contact us at musiclab+q@g.harvard.edu. By proceeding, you agree to participate in this study.</p><p align="left">Thank you for your interest.<br>The Music Lab at Harvard University<p>',
   prompt1: ' ',
   prompt2: ' ',
-  choices: ['Next']
+  choices: ['Next'],
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 };
 
 var prequiz = {
@@ -1219,7 +1222,9 @@ var prequiz = {
   stimulus: 'Before we begin, we have a few questions about you and your musical experiences if you would like to share.',
   prompt1: ' ',
   prompt2: ' ',
-  choices: ['Do experiences survey', 'Skip to quiz']
+  choices: ['Do experiences survey', 'Skip to quiz'],
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 }
 
 
@@ -1232,35 +1237,45 @@ var musicxp1 = {
     stimulus: 'How many hours per week do you currently practice a musical instrument? (voice counts too)',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['I don\'t currently play a musical instrument or sing', '<1 hour per week', '2&ndash;3 hours per week', '4&ndash;7 hours per week', '8 or more hours per week']
+    choices: ['I don\'t currently play a musical instrument or sing', '<1 hour per week', '2&ndash;3 hours per week', '4&ndash;7 hours per week', '8 or more hours per week'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
   {
     type: 'html-button-response-vert',
     stimulus: 'Think back as far as you can remember. When you were little, how often did your parent sing to you?',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['Once every 3 days or less', 'Once every day or two', '2&ndash;3 times a day', '4&ndash;7 times a day', '8 or more times a day']
+    choices: ['Once every 3 days or less', 'Once every day or two', '2&ndash;3 times a day', '4&ndash;7 times a day', '8 or more times a day'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
   {
     type: 'html-button-response-vert',
     stimulus: 'Think back as far as you can remember. When you were little, how often did your parent play music recordings for you?',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['Once every 3 days or less', 'Once every day or two', '2&ndash;3 times a day', '4&ndash;7 times a day', '8 or more times a day']
+    choices: ['Once every 3 days or less', 'Once every day or two', '2&ndash;3 times a day', '4&ndash;7 times a day', '8 or more times a day'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
   {
     type: 'html-button-response-vert',
     stimulus: 'Do you have \"perfect pitch\"? (this is sometimes referred to as \"absolute pitch\")',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['Yes', 'No', 'I don\'t know']
+    choices: ['Yes', 'No', 'I don\'t know'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
   {
     type: 'html-button-response-vert',
     stimulus: 'Have you ever taken instrumental/vocal music lessons?',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['Yes', 'No']
+    choices: ['Yes', 'No'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
 ]
 };
@@ -1275,7 +1290,9 @@ var lessonxp = {
     stimulus: 'On a scale from 1-4, how much did you enjoy your music lessons? (1 being \"not much\", and 4 being \"loved it\")',
     prompt1: ' ',
     prompt2: ' ',
-    choices: ['1 not much', '2 just okay', '3 liked it', '4 loved it']
+    choices: ['1 not much', '2 just okay', '3 liked it', '4 loved it'],
+    on_finish: function(data){
+      saveDataOnFinish(data);      }
   },
 ]
 };
@@ -1302,43 +1319,58 @@ var musicxpMore1 = {
       stimulus: 'Think about your peers when you first started playing. How did your musical skills compare to theirs?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['They were a lot better than me', 'They were a little better than me', 'I was a little better than them', 'I was a lot better than them']
+      choices: ['They were a lot better than me', 'They were a little better than me', 'I was a little better than them', 'I was a lot better than them'],
+
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'On an average day, how much time do you spend using the internet (on a computer, smartphone, or other device)?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['No time at all', '1&ndash;5 minutes', '6&ndash;10 minutes', '11&ndash;15 minutes', '16&ndash;30 minutes', '31&ndash;60 minutes', '1&ndash;2 hours', '2&ndash;4 hours', 'More than 4 hours']
+      choices: ['No time at all', '1&ndash;5 minutes', '6&ndash;10 minutes', '11&ndash;15 minutes', '16&ndash;30 minutes', '31&ndash;60 minutes', '1&ndash;2 hours', '2&ndash;4 hours', 'More than 4 hours'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'On an average day, when using the internet, how much time do you spend listening to music and/or watching videos that include music?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['No time at all', '1&ndash;5 minutes', '6&ndash;10 minutes', '11&ndash;15 minutes', '16&ndash;30 minutes', '31&ndash;60 minutes', '1&ndash;2 hours', '2&ndash;4 hours', 'More than 4 hours']
+      choices: ['No time at all', '1&ndash;5 minutes', '6&ndash;10 minutes', '11&ndash;15 minutes', '16&ndash;30 minutes', '31&ndash;60 minutes', '1&ndash;2 hours', '2&ndash;4 hours', 'More than 4 hours'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'Think of your skill at performing music (using a musical instrument or using your singing voice). How would you rate your own skill?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['I have no skill at all', 'I\'m a novice', 'I have some skill', 'I have a lot of skill', 'I\'m an expert']
+      choices: ['I have no skill at all', 'I\'m a novice', 'I have some skill', 'I have a lot of skill', 'I\'m an expert'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'How familiar are you with traditional music from around the world, including music from remote, indigenous peoples?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['I\'ve never heard their music', 'I\'m a little familiar with their music', 'I\'m somewhat familiar with their music', 'I\'m extremely familiar with their music']
+      choices: ['I\'ve never heard their music', 'I\'m a little familiar with their music', 'I\'m somewhat familiar with their music', 'I\'m extremely familiar with their music'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'survey-text',
       questions: [{prompt: 'Anything you want to tell us about your musical experience?', rows: 10, columns: 80}],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'survey-text',
-      questions: [{prompt: 'Do you want to participate in a follow-up study in the future? If so, please provide your email in the field below so that we can let you know when the next study is happening!'}]
+      questions: [{prompt: 'Do you want to participate in a follow-up study in the future? If so, please provide your email in the field below so that we can let you know when the next study is happening!'}],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     }
   ]
 };
@@ -1350,21 +1382,27 @@ var demographics1 = {
       stimulus: 'How would you describe your race?',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['American Indian/Alaska Native', 'Asian', 'Native Hawaiian or other Pacific Islander', 'White', 'More than One Race', 'Prefer not to say']
+      choices: ['American Indian/Alaska Native', 'Asian', 'Native Hawaiian or other Pacific Islander', 'White', 'More than One Race', 'Prefer not to say'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'Are you <b>Hispanic or Latino?</b>',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['Yes', 'No', 'Prefer not to say']
+      choices: ['Yes', 'No', 'Prefer not to say'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
     {
       type: 'html-button-response-vert',
       stimulus: 'What is your <b>sex</b>',
       prompt1: ' ',
       prompt2: ' ',
-      choices: ['Male', 'Female', 'Other/Prefer not to say']
+      choices: ['Male', 'Female', 'Other/Prefer not to say'],
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     }
   ]
 };
@@ -1376,7 +1414,9 @@ var quiztime = {
   stimulus: 'Thank you for filling out the survey!',
   prompt1: ' ',
   prompt2: ' ',
-  choices: ['Click here to continue to the quiz!']
+  choices: ['Click here to continue to the quiz!'],
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 }
 var takeMusicxp = {
   timeline: [musicxp1, lessons1, musicxpMore1, demographics1, quiztime],
@@ -1390,13 +1430,17 @@ var takeMusicxp = {
 
 var intro1 = {
   type: 'html-keyboard-response',
-  stimulus: '<p align="left">In this study, we\'ll play you recordings of people from all over the world. They will either be <b>singing</b> or <b>speaking</b>. We\'ll ask you to tell us <b>who you think is listening</b>: a baby or an adult. <p> For example, if you hear someone singing a lullaby, you might answer that you think a <b>baby</b> is listening. <p>Try to answer as fast as you can!</p><p align="center">Press any key to continue.</p>'
+  stimulus: '<p align="left">In this study, we\'ll play you recordings of people from all over the world. They will either be <b>singing</b> or <b>speaking</b>. We\'ll ask you to tell us <b>who you think is listening</b>: a baby or an adult. <p> For example, if you hear someone singing a lullaby, you might answer that you think a <b>baby</b> is listening. <p>Try to answer as fast as you can!</p><p align="center">Press any key to continue.</p>',
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 };
 /* training */
 /* Baby */
 var trainInfo1B = {
   type: 'html-keyboard-response',
-  stimulus: '<p align="center">First, let\'s practice! The first excerpt you will hear is a lullaby sung to a baby. So you should choose the <b>BABY</b> character for your response. Try to answer as fast as you can!</p><p align="center">Press any key to continue.</p>'
+  stimulus: '<p align="center">First, let\'s practice! The first excerpt you will hear is a lullaby sung to a baby. So you should choose the <b>BABY</b> character for your response. Try to answer as fast as you can!</p><p align="center">Press any key to continue.</p>',
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 
 
 };
@@ -1406,6 +1450,7 @@ var trainInfo1B = {
 var trainData1B = [{stimulus:`${baseUrl}/quizzes/fc/audio/TOR47A.mp3`, data: imgData1[0]}];
 
 let reactionT1
+
 
 
 var training1B = {
@@ -1418,6 +1463,7 @@ var training1B = {
       prompt: '<p>Someone is speaking or singing. Who do you think they are singing or speaking to?</p><p>Press <b>f</b> for '+labelR[0]+' or <b>j</b> for '+labelR[1]+'. </p><p>Try to answer as quickly as you can!</p><br><table align="center" width=80%><tr><td><img src='+imgR[0]+' width=90%></td><td>&emsp;</td><td><img src='+imgR[1]+' width=90%></td></tr><tr><td>F</td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td>J</td></tr></table>',
       response_ends_trial: true,
           on_finish: function(data){
+            saveDataOnFinish(data)
         data.correct1 = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.key);
         console.log(JSON.stringify(data));
         reactionT1 = (data.rt)/1000
@@ -1430,14 +1476,16 @@ var training1B = {
         var correct = jsPsych.data.get().last(1).values()[0].correct1;
         var key = jsPsych.data.get().last(1).values()[0].key_press;
         if(correct == true && key== "70")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src="'+imgR[0]+'" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src="`+imgR[0]+`" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == true && key== "74")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="'+imgR[1]+'" width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="`+imgR[1]+`" width=90%></td></tr></table>`;}
         else if(correct == false && key=="70")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == false && key=="74")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
       },
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
   ],
   timeline_variables: trainData1B,
@@ -1462,7 +1510,9 @@ var reTrain1B = {
 
 var trainInfo1A = {
   type: 'html-keyboard-response',
-  stimulus: '<p align="center">Let\'s practice a second time. This next excerpt will be directed toward an adult, so you should choose the <b>ADULT</b> character. Try to answer as quickly as possible!</p><p align="center">Press any key to continue.</p>'
+  stimulus: '<p align="center">Let\'s practice a second time. This next excerpt will be directed toward an adult, so you should choose the <b>ADULT</b> character. Try to answer as quickly as possible!</p><p align="center">Press any key to continue.</p>',
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 };
 
 
@@ -1478,6 +1528,7 @@ var training1A = {
       prompt: '<p>Someone is speaking or singing. Who do you think they are singing or speaking to?</p><p>Press <b>f</b> for '+labelR[0]+' or <b>j</b> for '+labelR[1]+'. </p><p>Try to answer as quickly as you can!</p><br><table align="center" width=80%><tr><td><img src='+imgR[0]+' width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src='+imgR[1]+' width=90%></td></tr><tr><td>F</td><td>&emsp;</td><td>J</td></tr></table> ',//CONNIE CONTINUE HERE!!!
       response_ends_trial: true,
           on_finish: function(data){
+            saveDataOnFinish(data)
         data.correct1 = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.key);
         console.log(JSON.stringify(data));
         reactionT1 = (data.rt)/1000
@@ -1490,14 +1541,16 @@ var training1A = {
         var correct = jsPsych.data.get().last(1).values()[0].correct1;
         var key = jsPsych.data.get().last(1).values()[0].key_press;
         if(correct == true && key== "70")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src="'+imgR[0]+'" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src="`+imgR[0]+`" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == true && key== "74")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="'+imgR[1]+'" width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to continue!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="`+imgR[1]+`" width=90%></td></tr></table>`;}
         else if(correct == false && key=="70")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == false && key=="74")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reactionT1+' seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reactionT1+` seconds</b>.<br>Press any key to try again!</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
       },
+      on_finish: function(data){
+      saveDataOnFinish(data);      }
     },
   ],
   timeline_variables: trainData1A,
@@ -1519,7 +1572,9 @@ var reTrain1A = {
 /* real study begins here! */
 var ready1 = {
   type: 'html-keyboard-response',
-  stimulus: '<p align="left">Great work on the practice! Now you\'re ready to begin.</p><p align="center">Press any key to continue.</p>'
+  stimulus: '<p align="left">Great work on the practice! Now you\'re ready to begin.</p><p align="center">Press any key to continue.</p>',
+  on_finish: function(data){
+      saveDataOnFinish(data);      }
 };
 var songTest1 = {
   timeline: [
@@ -1531,11 +1586,12 @@ var songTest1 = {
       prompt: '<p>Someone is speaking or singing. Who do you think they are singing or speaking to?</p><p>Press <b>f</b> for '+labelR[0]+' or <b>j</b> for '+labelR[1]+'. </p><p>Try to answer as quickly as you can!</p><br><table align="center" width=80%><tr><td><img src='+imgR[0]+' width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src='+imgR[1]+' width=90%></td></tr><tr><td>F</td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td>J</td></tr></table>',
       response_ends_trial: true,
           on_finish: function(data){
+            saveDataOnFinish(data)
             data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.key);
             count = jsPsych.data.get().filter({correct: true}).count();
             reaction1 = (data.rt)/1000;
             console.log(count)
-            console.log(reaction1)
+           
           },
     },
     {
@@ -1544,15 +1600,16 @@ var songTest1 = {
         var correct = jsPsych.data.get().last(1).values()[0].correct;
         var key = jsPsych.data.get().last(1).values()[0].key_press;
         if(correct == true && key== "70")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reaction1+' seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src="'+imgR[0]+'" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reaction1+` seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src="`+imgR[0]+`" width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == true && key== "74")
-          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>'+reaction1+' seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="'+imgR[1]+'" width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="#00cc00">Correct!</font></p><p style="font-size:18px">You responded in <b>`+reaction1+` seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src="`+imgR[1]+`" width=90%></td></tr></table>`;}
         else if(correct == false && key=="70")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reaction1+' seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reaction1+` seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td></tr></table>`;}
         else if(correct == false && key=="74")
-          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>'+reaction1+' seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
+          {return `<p style="font-size:24px"><font color="red">Incorrect.</font></p><p style="font-size:18px">You responded in <b>`+reaction1+` seconds</b>.<br>Press any key to continue.</p><table align="center" width=80%><tr><td><img src=${baseUrl}/quizzes/fc/img/white.jpg width=90%></td><td>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td><td><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=90%></td></tr></table>`;}
       },
       on_finish: function(data){
+        saveDataOnFinish(data)
         reactionMean = (jsPsych.data.get().filter({trial_type: 'audio-keyboard-response'}).select('rt').mean())/1000;
         trialCount = jsPsych.data.get().filter({trial_type: 'audio-keyboard-response'}).count();
         console.log(reactionMean);
@@ -1566,8 +1623,8 @@ var songTest1 = {
     type: 'without-replacement'
   }
 };
-let reacion1;
-
+let reaction1;
+let trialCount;
 /* results and social media sharing */
 var social1 = {
   type:'display-prediction',
@@ -1594,7 +1651,19 @@ var self = this;
 
 
 
-timeline.push(welcome1, prequiz, takeMusicxp, intro1, trainInfo1B, reTrain1B, trainInfo1A, reTrain1A, ready1, songTest1, /*continueLogic1, */social1);
+
+
+var saveDataOnFinish= function(data){
+  const toSend = data;
+  return axiosIDS
+        .post('/stimulusResponse', {
+        user_id: self.props.user.profile.id,
+        data_string: toSend,
+        })    
+  
+};
+
+
 
 var preload = [song_list[0].stimulus, song_list[1].stimulus, song_list[2].stimulus, song_list[3].stimulus, song_list[4].stimulus, song_list[5].stimulus,
 song_list[6].stimulus, song_list[7].stimulus, song_list[8].stimulus, song_list[9].stimulus, song_list[10].stimulus, song_list[11].stimulus, song_list[12].stimulus,
@@ -1611,15 +1680,49 @@ song_list[76].stimulus, song_list[77].stimulus, song_list[78].stimulus, song_lis
 
 
 
-jsPsych.init({
-    timeline: timeline,
-    preload_audio: preload,
-    use_webaudio: false,
-    on_finish: function() {
-      jsPsych.data.displayData();
-    },
-    default_iti: 250
-});
+
+new Promise((resolve, reject) => {
+    
+
+
+timeline.push(welcome1, prequiz, takeMusicxp, intro1, trainInfo1B, reTrain1B, trainInfo1A, reTrain1A, ready1, songTest1, /*continueLogic1, */social1);
+
+
+
+    resolve();
+})
+     .then(() => {
+        _this.hideLoading();
+        document.getElementById("jsPsychTarget").focus()
+        document.getElementById("jsPsychTarget").style.outline='none'
+      })
+      .then(() => {
+
+      jsPsych.init({
+          timeline: timeline,
+          preload_audio: preload,
+          use_webaudio: false,
+         display_element: this.refs.jsPsychTarget,
+          on_finish: function() {
+            jsPsych.data.displayData();
+          },
+          default_iti: 250
+      });
+      })
+
+
+
+
+
+// jsPsych.init({
+//     timeline: timeline,
+//     preload_audio: preload,
+//     use_webaudio: false,
+//     on_finish: function() {
+//       jsPsych.data.displayData();
+//     },
+//     default_iti: 250
+// });
 
 
 
@@ -2600,7 +2703,7 @@ new Promise((resolve, reject) => {
 
             <div ref="preamble" id="preamble">
             <div style={{ display: loading ? 'none' : '' }}>
-                <p className={s.title}>IDS</p>
+                <p className={s.title}>Who's Listening?</p>
                 <hr className={s.divider} />
               </div>
             </div>
