@@ -1694,6 +1694,7 @@ timeline.push(welcome1, prequiz, takeMusicxp, intro1, trainInfo1B, reTrain1B, tr
     let reactionMean;
     let imgData2;
     let reactionT2
+    let reaction2
 var img = ['baby', 'adult'];
 var labelR = jsPsych.randomization.shuffle(img);
   var imgR = [`${baseUrl}/quizzes/fc/img/${labelR[0]}.jpg`, 
@@ -2809,9 +2810,9 @@ var training2B = {
         if(correct == true && button== 0)
           {return `<br><br><img src="`+imgR[0]+`" width=300><img src=${baseUrl}/quizzes/fc/img/white.jpg width=300><br><div align="center"><font size=24 color="#00cc00">Correct!</font></div><br><div>You responded in `+reactionT2+`seconds.</div>`;}
         else if(correct == true && button== 1)
-          {return `<br><br><img src=${baseUrl}/quizzes/fc/img/white.jpg width=300><img src="`+imgR[1]+`" width=300><br><div align="center"><font size=24 color="#00cc00">Correct!</font></div><br><div>You responded in `+reactionT2+` seconds.</div>`;}
+          {return `<br><br><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=300><img src="`+imgR[1]+`" width=300><br><div align="center"><font size=24 color="#00cc00">Correct!</font></div><br><div>You responded in `+reactionT2+` seconds.</div>`;}
         else if(correct == false && button==0)
-          {return `<br><br><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg" width=300><img src=${baseUrl}/quizzes/fc/img/white.jpg width=300><br><div align="center"><font size=24 color="red">Incorrect.</font></div><br><div>You responded in `+reactionT2+` seconds.<br>Try again!</div>`;}
+          {return `<br><br><img src=${baseUrl}/quizzes/fc/img/white.jpg" width=300><img src=${baseUrl}/quizzes/fc/img/white.jpg width=300><br><div align="center"><font size=24 color="red">Incorrect.</font></div><br><div>You responded in `+reactionT2+` seconds.<br>Try again!</div>`;}
         else if(correct == false && button==1)
           {return `<br><br><img src=${baseUrl}/quizzes/fc/img/white.jpg width=300><img src=${baseUrl}/quizzes/fc/img/incorrect.jpg width=300><br><div align="center"><font size=24 color="red">Incorrect.</font></div><br><div>You responded in `+reactionT2+` seconds.<br>Try again!</div>`;}
       },
