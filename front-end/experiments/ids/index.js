@@ -1365,7 +1365,7 @@ var demographics1 = {
   ]
 };
 
-let reactionT2
+
 
 var quiztime = {
   type: 'html-button-response',
@@ -1693,6 +1693,7 @@ timeline.push(welcome1, prequiz, takeMusicxp, intro1, trainInfo1B, reTrain1B, tr
     let count;
     let reactionMean;
     let imgData2;
+    let reactionT2
 var img = ['baby', 'adult'];
 var labelR = jsPsych.randomization.shuffle(img);
   var imgR = [`${baseUrl}/quizzes/fc/img/${labelR[0]}.jpg`, 
