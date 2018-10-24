@@ -45,7 +45,7 @@ const config = {
   // Options affecting the output of the compilation
   output: {
     path: path.resolve(__dirname, './public/dist'),
-    publicPath: isDebug ? '/dist/' : '//d7gvdmeqbqrlo.cloudfront.net/dist/',
+    publicPath: isDebug ? '/dist/' : '//dzwxw9gdk74i8.cloudfront.net/dist/',
     filename: isDebug ? '[name].js?[hash]' : '[name].[hash].js',
     chunkFilename: isDebug ? '[id].js?[chunkhash]' : '[id].[chunkhash].js',
     sourcePrefix: '  '

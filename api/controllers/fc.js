@@ -1,4 +1,5 @@
 const express = require('express');
+
 const path = require('path');
 const fs = require('fs');
 const basicAuth = require('basic-auth');
@@ -120,17 +121,17 @@ module.exports = (rpc, conn, dbWrite) => {
         { user_id: user_id, stimulus: stimulus, data_string: data_string }
       ]
     };
-    const update = {
-      method: 'raw',
-      params: [
-        `UPDATE "fc_stimuli" SET "num_responses" = "num_responses" + 1 WHERE "stimulus" = '${stimulus}'`
-      ]
-    };
+    // const update = {
+    //   method: 'raw',
+    //   params: [
+    //     `UPDATE "fc_stimuli" SET "num_responses" = "num_responses" + 1 WHERE "stimulus" = '${stimulus}'`
+    //   ]
+    // };
     return rpc(conn, channelName, create)
       .then(data => {
-        return dbWrite(conn, fileName + '_db_write', update).then(() => {
+       // return dbWrite(conn, fileName + '_db_write', update).then(() => {
           res.json(data);
-        });
+        //});
       })
       .catch(next);
   });
@@ -175,33 +176,7 @@ module.exports = (rpc, conn, dbWrite) => {
     }
   });
 
-  // get all responses in csv format for a quiz - needs work
-  // router.get('/admincsv', (req, res, next) => {
-  //   // TODO: refactor this to be set on contruction of the controller
-  //   // possibly
-  //   const user = basicAuth(req);
-  //   if (!user || !user.name || !user.pass) {
-  //     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-  //     return res.sendStatus(401);
-  //   }
-  //   if (checkUser(user.name, user.pass)) {
-  //     const rpcInput = {
-  //       method: 'getResponseCsv',
-  //       params: []
-  //     };
-  //     const channelName = fileName + '_rpc_worker';
-  //     return rpc(conn, channelName, rpcInput)
-  //       .then(data => {
-  //         res.set('Content-Type', 'text/csv');
-  //         res.send(data);
-  //       })
-  //       .catch(next);
-  //   } else {
-  //     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-  //     res.sendStatus(401);
-  //     return;
-  //   }
-  // });
+  
 
   return router;
 };

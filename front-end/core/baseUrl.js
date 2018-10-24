@@ -1,3 +1,3 @@
-const baseUrl = process.env.NODE_ENV === 'production' ? 'https://d7gvdmeqbqrlo.cloudfront.net' : '';
+const baseUrl = process.env.NODE_ENV === 'production' ? 'https://dzwxw9gdk74i8.cloudfront.net' : '';
 
 module.exports = baseUrl;

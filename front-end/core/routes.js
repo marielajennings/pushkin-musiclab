@@ -4,7 +4,7 @@ import About from '../pages/about/index';
 import ErrorPage from '../pages/error/index';
 import MobileNotSupported from '../pages/mobile-not-supported/index';
 import Findings from '../pages/findings/index';
-import HomePage from '../pages/home/index';
+import QuizPage from '../pages/home/index';
 import Paths from '../pages/paths/index';
 import Projects from '../pages/projects/index';
 import Quizzes from '../pages/quizzes/index';
@@ -19,7 +19,7 @@ import ForumQuestion from '../components/ForumPostContent/index';
 import Admin from '../pages/admin/index';
 import Auth from './auth';
 import IDS from '../experiments/ids/index'
-
+import CB from '../experiments/cb/index'
 
 import FC from '../experiments/fc/index';
 //mport mobileFC from '../experiments/fc/index-mobile';
@@ -95,7 +95,7 @@ export const routes = (
       <Container auth={authSwitcher()} showForum={CONFIG.forum} {...props} />
     )}
   >
-    <IndexRoute component={HomePage} />
+    <IndexRoute component={QuizPage} />
     <Route path="/paths" component={Paths} />
     {/*
   <Route path="/quizzes" component={Quizzes}>
@@ -124,6 +124,7 @@ export const routes = (
 <Route path="/quizzes/fc" component={ForumWrapper(FC, 'fc', CONFIG)} />
 
 
+<Route path="/quizzes/cb" component={ForumWrapper(CB, 'cb', CONFIG)} />
      
 
 <Route path="/quizzes/ids" component={ForumWrapper(IDS, 'ids', CONFIG)} />

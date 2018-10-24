@@ -24,7 +24,7 @@ class Layout extends React.Component {
         <Footer />
       </div>
     );
-  }
+}
 }
 
 export default Layout;

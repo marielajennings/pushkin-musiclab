@@ -1,7 +1,7 @@
 version: '2'
 services:
   api:
-    image: 'pushkin/api:latest'
+    image: 'cbainbridge/api:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - NODE_ENV=production
@@ -13,23 +13,23 @@ services:
     labels:
       io.rancher.scheduler.global: 'true'
   cron:
-    image: 'pushkin/cron:latest'
+    image: 'cbainbridge/cron:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
       - 'API_ADDRESS=http://api:3000/api'
-      - DATABASE_URL=INSERT_HERE
-      - TRANSACTION_DATABASE_URL=INSERT_HERE 
+      - DATABASE_URL=postgres://main:Darwin4ever@main.cf6f00afdp6s.us-east-2.rds.amazonaws.com:5432/main
+      - TRANSACTION_DATABASE_URL=postgres://transactions:Darwin4ever@transactions.cf6f00afdp6s.us-east-2.rds.amazonaws.com:5432/transactions
     links:
       - message-queue
       - api
     labels:
       io.rancher.scheduler.global: 'true'
   db-worker:
-    image: 'pushkin/db-worker:latest'
+    image: 'cbainbridge/db-worker:latest'
     environment:
       - 'AMPQ_ADDRESS=amqp://message-queue:5672'
-      - DATABASE_URL=INSERT_HERE
-      - TRANSACTION_DATABASE_URL=INSERT_HERE
+      - DATABASE_URL=postgres://main:Darwin4ever@main.cf6f00afdp6s.us-east-2.rds.amazonaws.com:5432/main
+      - TRANSACTION_DATABASE_URL=postgres://transactions:Darwin4ever@transactions.cf6f00afdp6s.us-east-2.rds.amazonaws.com:5432/transactions
       - NODE_ENV=production
     links:
       - message-queue
@@ -48,7 +48,7 @@ services:
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
   message-queue:
-    image: 'pushkin/message-queue:latest'
+    image: 'cbainbridge/message-queue:latest'
     environment:
       CONFD_ARGS: '--interval 5'
       RABBITMQ_CLUSTER_PARTITION_HANDLING: autoheal
@@ -81,6 +81,6 @@ services:
       io.rancher.container.start_once: 'true'
       io.rancher.container.hostname_override: container_name
   server:
-    image: 'pushkin/server:latest'
+    image: 'cbainbridge/server:latest'
     labels:
       io.rancher.scheduler.global: 'true'

@@ -8,33 +8,78 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-/*@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");*/
-
-/*@import url("https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation-flex.css");*/
-
-/*@media screen and (max-width: 1024px) {
-
-  .content {
-    padding: 0 16px;
-  }
-
-}*/
-
-@import url("https://fonts.googleapis.com/css?family=Noticia+Text");
-
-.tan {
-  background-color: #ebebe1;
-  border-width: 0px;
-  margin: 0px;
+ /* @font-face {
+  font-family: 'San Francisco';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('SanFranciscoText-Regular'),
+    url(../../public/fonts/SanFrancisco_font/SanFranciscoText-Regular.otf) format('opentype');
 }
 
-.display {
-  margin-top: 90px;
-  margin-bottom: 90px;
+@font-face {
+  font-family: 'San Francisco';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('SanFranciscoText-Bold'),
+    url(../../public/fonts/SanFrancisco_font/SanFranciscoText-Bold.otf) format('opentype'); */
+/* } */
+
+@media all and (max-width: 1200px) {
+  .column {
+    margin-top: 35px;
+  }
+  .margin {
+    margin-top: 35px;
+    border-top: dashed #a9a9a9;
+  }
+  .border {
+    border: none !important;
+  }
+}
+
+@media all and (min-width: 700px) {
+  .textCenter {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+}
+
+.border {
+  border-right: dashed #a9a9a9;
+}
+
+.tan {
+  background-color: #333B50;
+  border-width: 0px;
+  margin: 0px;
+  font-family: -apple-system, sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  padding: 25px 25px 25px 25px;
+}
+
+.blue {
+  background-color: #2446A3;
+  border-width: 0px;
+  margin: 0px;
+  font-family: -apple-system, sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  padding: 25px 25px 25px 25px;
 }
 
 .white {
   background-color: #ffffff;
+  border-width: 0px;
+  margin: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.darkblue {
+  background-color: #333B50;
   border-width: 0px;
   margin: 0px;
 }
@@ -53,24 +98,64 @@
 }
 
 .title {
-  font-family: "Noticia Text", serif;
+  font-family: -apple-system, sans-serif;
   font-size: 23px;
-  color: #d19336;
-  margin-left: 20px;
-  margin-right: 20px;
+  color: #2446A3;
 }
 
 .blurb {
-  font-family: "Noticia Text", serif;
+  font-family: -apple-system, sans-serif;
   font-size: 16px;
-  color: #082046;
+  color: #F34235;
   text-align: justify;
   text-justify: inter-word;
-  margin-left: 20px;
-  margin-right: 20px;
 }
 
 .gif {
   display: block;
   margin: auto;
+}
+
+.heading {
+  /*font-family: 'Oswald', sans-serif;*/
+  font-family: -apple-system, sans-serif;
+  font-size: 60px;
+  line-height: 60px;
+  color: #000000;
+  text-align: center;
+}
+
+.subText {
+  /*font-family: 'Roboto Slab', serif;*/
+  font-family: -apple-system, serif;
+  font-size: 31px;
+  color: #000000;
+  text-align: center;
+  line-height: 1;
+}
+
+.rightBorder {
+  borderright: dashed #a9a9a9;
+  borderwidth: 0px;
+}
+
+.bottomBorder {
+  borderbottom: dashed #a9a9a9;
+  borderwidth: 0px;
+}
+
+.quizbox {
+  background-color: #333B50;
+  padding: 0px 0px 0px 0px;
+}
+
+.theophoto {
+  width: 250px;
+  height: 250px;
+}
+
+
+
+intro {
+  background-color: #747A88
 }

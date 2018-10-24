@@ -18,9 +18,9 @@ const webpack = require('webpack');
 
 // TODO: Update configuration settings
 const config = {
-  title: 'Games With Words', // Your website title
-  url: 'https://d7gvdmeqbqrlo.cloudfront.net/', // Your website URL
-  project: 'gameswithwords', // Firebase project. See README.md -> How to Deploy
+  title: 'The Music Lab', // Your website title
+  url: 'https://dzwxw9gdk74i8.cloudfront.net/', // Your website URL
+  project: 'themusiclab', // Firebase project. See README.md -> How to Deploy
   trackingID: 'UA-3271533-1' // Google Analytics Site's ID
 };
 
@@ -126,7 +126,7 @@ tasks.set('publish', () => {
         const uploader = client.uploadDir({
           localDir: 'public',
           deleteRemoved: true,
-          s3Params: { Bucket: 'gameswithwords' } // TODO: Update deployment URL
+          s3Params: { Bucket: 'musiclabdeploy', ACL: 'bucket-owner-full-control' } // TODO: Update deployment URL
         });
         uploader.on('error', reject);
         uploader.on('end', resolve);

@@ -1,5 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import * as b from 'react-bootstrap';
+import * as i from 'react-social-icons';
 import s from './Header.css';
 import l from './Layout.css';
 import { Link } from 'react-router';
@@ -32,13 +34,13 @@ class Header extends React.Component {
       if (loggedIn) {
         return <font className={s.navLinks}>Dashboard</font>;
       } else {
-        return <font className={s.navLinks}>Log in</font>;
+        return <font className={s.navLinks}>log in</font>;
       }
     } else {
       if (loggedIn) {
         return <b.NavItem>Dashboard</b.NavItem>;
       } else {
-        return <b.NavItem>Log In</b.NavItem>;
+        return <b.NavItem>log in</b.NavItem>;
       }
     }
   };
@@ -56,164 +58,54 @@ class Header extends React.Component {
     if (auth) {
       loggedIn = auth.isAuthenticated();
     }
-    if (this.home()) {
+
       return (
-        <header id="header">
-          <Link to="/paths">
-            <div
-              className={s.landing}
-              style={{
-                backgroundImage: `url(${require('../../img/logo_button-min.png')})`
-              }}
-            />
-          </Link>
-          <b.Image
-            style={{ display: 'none' }}
-            src={require('../../img/favicon.ico')}
-          />
-        </header>
-      );
-    } else if (this.state.mobile && !this.home()) {
-      return (
+        <div id="App">
         <header
           className={s.header}
           id="header"
           ref={node => (this.root = node)}
         >
           <b.Image
-            src={require('../../img/gww_logo.png')}
-            className={s.logo}
-            style={{ marginTop: '5px', height: '40px' }}
+            src={require('../../img/themusiclablogo.png')}
+            responsive
           />
-          <div className={s.navWrapper}>
-            <b.Nav bsStyle="pills">
-              <b.NavDropdown
-                active
-                title="Menu"
-                style={{ padding: '3px', marginTop: '2px' }}
-                id="bg-nested-dropdown"
-              >
-                <LinkContainer to="/paths">
-                  <b.MenuItem>
-                    <span className={s.navLinks}>Paths</span>
-                  </b.MenuItem>
-                </LinkContainer>
-                <LinkContainer to="/projects">
-                  <b.MenuItem>
-                    <span className={s.navLinks}>Projects</span>
-                  </b.MenuItem>
-                </LinkContainer>
-                <LinkContainer to="/quizzes">
-                  <b.MenuItem>
-                    <span className={s.navLinks}>Quizzes</span>
-                  </b.MenuItem>
-                </LinkContainer>
-                <LinkContainer to="/findings">
-                  <b.MenuItem>
-                    <span className={s.navLinks}>Findings</span>
-                  </b.MenuItem>
-                </LinkContainer>
-                <LinkContainer to="/about">
-                  <b.MenuItem>
-                    <span className={s.navLinks}>About</span>
-                  </b.MenuItem>
-                </LinkContainer>
-                <b.MenuItem href="https://blog.gameswithwords.org/">
-                  <span className={s.navLinks}>Blog</span>
-                </b.MenuItem>
-                {typeof loggedIn !== 'undefined' && (
-                  <LinkContainer to="/dashboard">
-                    <b.MenuItem>
-                      {this.showDashboardOrLogIn(loggedIn, 'mobile')}
-                    </b.MenuItem>
-                  </LinkContainer>
-                )}
-                {showForum && (
-                  <LinkContainer to="/forum">
-                    <b.MenuItem>
-                      <span className={s.navLinks}>Forum</span>
-                    </b.MenuItem>
-                  </LinkContainer>
-                )}
-                {isAdmin && (
-                  <LinkContainer to="/admin">
-                    <b.MenuItem>
-                      <span className={s.navLinks}>Admin</span>
-                    </b.MenuItem>
-                  </LinkContainer>
-                )}
-              </b.NavDropdown>
-            </b.Nav>
-          </div>
-        </header>
-      );
-    } else {
-      return (
-        <header
-          className={s.header}
-          id="header"
-          ref={node => (this.root = node)}
-        >
-          {this.home() ? (
-            <b.Image
-              src={require('../../img/logo_square-min.png')}
-              responsive
-            />
-          ) : (
-            <b.Image
-              src={require('../../img/gww_logo.png')}
-              className={s.logo}
-            />
-          )}
-          <b.Nav
-            style={{
-              position:"absolute",
-              top:"3.5em",
-              marginBottom: '3em',
-              margin: 'auto',
-              fontFamily: "'Ribeye Marrow', cursive",
+
+          <b.Nav style={{
+              margin: '0px',
+              fontFamily: "'San Francisco'",
               fontSize: '20px',
-              backgroundColor: '#a9a9a9'
+              backgroundColor: '#2F2E2E'
             }}
-            bsStyle="tabs"
-            justified
+            bsStyle="pills"
           >
-            <LinkContainer to="/paths">
-              <b.NavItem>Paths</b.NavItem>
-            </LinkContainer>
-            <LinkContainer to="/projects">
-              <b.NavItem>Projects</b.NavItem>
-            </LinkContainer>
-            <LinkContainer to="/quizzes">
-              <b.NavItem>Quizzes</b.NavItem>
-            </LinkContainer>
-            <LinkContainer to="/findings">
-              <b.NavItem>Findings</b.NavItem>
-            </LinkContainer>
-            <LinkContainer to="/about">
-              <b.NavItem>About</b.NavItem>
-            </LinkContainer>
-            <b.NavItem href="https://blog.gameswithwords.org/">Blog</b.NavItem>
-            {typeof loggedIn !== 'undefined' && (
+          <b.NavItem href="https://www.themusiclab.org/">
+            home
+          </b.NavItem>
+          <b.NavItem>
+            about
+          </b.NavItem>
+          <b.NavItem>
+            quizzes
+          </b.NavItem>
+          <b.NavItem>
+            studies
+          </b.NavItem>
+          <b.NavItem>
+            natural history of song
+          </b.NavItem>
+          {typeof loggedIn !== 'undefined' && (
               <LinkContainer to="/dashboard">
                 {this.showDashboardOrLogIn(loggedIn)}
               </LinkContainer>
             )}
-            {showForum && (
-              <LinkContainer to="/forum">
-                <b.NavItem>Forum</b.NavItem>
-              </LinkContainer>
-            )}
-            {isAdmin && (
-              <LinkContainer to="/admin">
-                <b.NavItem>Admin</b.NavItem>
-              </LinkContainer>
-            )}
           </b.Nav>
-        </header>
+
+          </header>
+          </div>
+
       );
     }
   }
-}
 
 export default Header;
