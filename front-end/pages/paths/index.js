@@ -52,7 +52,8 @@ class QuizPage extends React.Component {
                         >
                         World Music Quiz
                         </a>
-                        <Button className="pull-right" bsStyle="danger" href="http://archive.gameswithwords.org/WhichEnglish">Play</Button>
+
+                        <Button className="pull-right" bsStyle="danger" to="/quizzes/fc">Play</Button>
                       </Panel.Heading>
                         <Panel.Body>
                           <p className={s.tan}>

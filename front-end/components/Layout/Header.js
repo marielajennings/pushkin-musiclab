@@ -79,9 +79,11 @@ class Header extends React.Component {
             }}
             bsStyle="pills"
           >
-          <b.NavItem href="https://www.themusiclab.org/">
+           
+          <b.NavItem href = "/">
             home
           </b.NavItem>
+
           <b.NavItem>
             about
           </b.NavItem>

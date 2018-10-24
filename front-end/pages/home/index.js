@@ -46,7 +46,13 @@ class QuizPage extends React.Component {
                         >
                         World Music Quiz
                         </a>
-                        <Button className="pull-right" bsStyle="danger" href="http://archive.gameswithwords.org/WhichEnglish">Click here to play!</Button>
+
+
+               <Link to="/quizzes/fc">
+                    <Button className="pull-right" bsStyle="danger">Click here to play!</Button>
+               </Link>
+
+
                       </Panel.Heading>
                         <Panel.Body className={s.quizbox}>
                           <p className={s.tan}>
@@ -97,7 +103,9 @@ class QuizPage extends React.Component {
                         >
                           Synthesizer Game
                         </a>
-                        <Button className="pull-right" bsStyle="danger" href="http://archive.gameswithwords.org/VocabQuiz">Click here to play!</Button>
+                          <Link to="/quizzes/cb">
+                    <Button className="pull-right" bsStyle="danger">Click here to play!</Button>
+               </Link>
                       </Panel.Heading>
                       <Panel.Body className={s.quizbox}>
                         <p className={s.tan}>
@@ -148,7 +156,9 @@ class QuizPage extends React.Component {
                       >
                       Who Is Listening?
                       </a>
-                      <Button className="pull-right "bsStyle="danger" href="http://archive.gameswithwords.org/VocabQuiz">Click here to play!</Button>
+                        <Link to="/quizzes/ids">
+                    <Button className="pull-right" bsStyle="danger">Click here to play!</Button>
+               </Link>
                     </Panel.Heading>
                     <Panel.Body className={s.quizbox}>
                   <p className={s.tan}>

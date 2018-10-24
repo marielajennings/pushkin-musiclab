@@ -2109,7 +2109,7 @@ new Promise((resolve, reject) => {
 
             <div ref="preamble" id="preamble">
             <div style={{ display: loading ? 'none' : '' }}>
-                <p className={s.title}>Guess the Song Type</p>
+                <p className={s.title}>World Music Quiz</p>
                 <hr className={s.divider} />
               </div>
             </div>
